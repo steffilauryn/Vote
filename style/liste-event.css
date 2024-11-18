@@ -1,0 +1,59 @@
+#events{
+    display: grid;
+    place-items: center; 
+    overflow-x: hidden;
+    /* gap: 1rem; */
+}
+
+#eventCard{
+    background-color: white;
+    color:black;
+    transition: box-shadow .3s;
+    margin-top: 1rem;
+    
+}
+
+#eventCardImg{
+    background-color: white;
+    object-fit:contain; 
+}
+
+#eventCard:hover{
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+
+}
+
+/* MOBILE */
+@media only screen and (max-width: 425px) {
+    #events{
+        grid-template-columns: repeat(1, 1fr); /* Makes a vertical stack */
+    }
+}
+
+/* TABLET  */
+@media only screen and (min-width: 426px) {
+    #events{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* TABLET  */
+@media only screen and (min-width: 426px) {
+    #events{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* LAPTOP  */
+@media only screen and (min-width: 1024px) {
+    #events{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* MASSIVE SCREENS  */
+@media only screen and (min-width: 1024px) {
+    #events{
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+}

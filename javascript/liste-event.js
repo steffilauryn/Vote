@@ -32,6 +32,19 @@ fetch(apiURLEvent)
         eventsDiv.appendChild(eventCardClone);
     });
   })
+
   .catch(error => {
     console.error('Fetch error: ', error);
-  });
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ;
