@@ -17,6 +17,8 @@ fetch(apiURLEvent)
         const eventCardClone = eventCard.cloneNode(true);
         eventCardClone.querySelector('#eventName').textContent = event.titre;
         eventCardClone.querySelector('#eventDescription').textContent = event.card_description;
+        eventCardClone.querySelector('#event-id').textContent = event.id;
+        eventCardClone.querySelector('#event-status').textContent = event.statut;
         if(event.client){
             const clientName = event.client.nom_compagnie;
             const clientLogoURL = event.client.logo.url;
@@ -28,6 +30,10 @@ fetch(apiURLEvent)
                  clientLogoElement.alt = clientName; // Optional: Add alt text for accessibility
              }
         }
+        // Update the onclick attribute
+        eventCardClone.setAttribute('onclick', `window.location.href = 'questions.html?event_id=${event.id}&event_titre=${event.titre}'`);
+
+
         eventCardClone.style.display = 'block';
         eventsDiv.appendChild(eventCardClone);
     });
@@ -37,7 +43,11 @@ fetch(apiURLEvent)
     console.error('Fetch error: ', error);
   })
   
-  
+  function retrieveEvent(eventId,eventName){
+    console.log(eventId);
+    console.log(eventName);
+
+  }
   
   
   

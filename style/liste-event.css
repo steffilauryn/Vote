@@ -23,6 +23,20 @@
 
 }
 
+.badge-container {
+    display: flex;
+    gap: 0.5rem; /* Adds space between the spans */
+    position: absolute;
+}
+
+
+
+
+
+
+
+
+
 /* MOBILE */
 @media only screen and (max-width: 425px) {
     #events{
