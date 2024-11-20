@@ -1,3 +1,16 @@
+body{
+    background-color: whitesmoke;
+}
+
+.navbar {
+    background: linear-gradient(#EDFBEE, whitesmoke) !important; 
+    font-size: large;
+}
+
+.navbar a.nav-link:hover {
+    color: gray; /* Optional: Change color on hover */
+    border-bottom: 4px solid green;
+}
 
 .previous {
     text-decoration: none;
@@ -22,9 +35,11 @@
     display: block;
 }
 
-
+#event-titre{
+    margin-top: 1rem;
+}
 #question-button{
-    width: 75%;
+    width: 100%;
     place-self: center;
     text-align: center;
     margin-bottom: 1rem;
@@ -55,6 +70,30 @@
     padding: 0.25rem;
 }
 
+section {
+    display: flex; 
+}
+
+#eventInformation, #questions {
+    padding: 1rem;
+    box-sizing: border-box; /*Ensures padding doesn't add to width*/
+}
+
+#eventInformation{
+    box-shadow: 0 0 10px 5px black;
+}
+
+#eventImg{
+    max-width: 25%;
+    object-fit:contain; 
+    float: left;
+    margin-right: 2rem;
+}
+
+#eventDescription{
+    position: relative;
+}
+
 /* MOBILE */
 @media only screen and (max-width: 426px) {
     .previous{
@@ -70,5 +109,27 @@
        justify-self: center; /* Horizontal alignment */
        align-self: center;   /* Vertical alignment */
        
+    }
+    #eventInformation{
+        display: none;
+    }
+}
+
+/* laptops and higher */
+@media (min-width: 426px) {
+    section {
+        flex-direction: row; /* Arrange children horizontally */
+    }
+
+    #eventInformation {
+        flex: 0 0 30%; /* Fixed width: 20% of the container */
+        max-width: 30%; /* Prevent overflow */
+        max-height: max-content;
+        background-color: #f9f9f9; /* Optional: Background color */
+        margin : 2rem;
+    }
+
+    #questions {
+        flex: 1; /* Take the remaining 80% */
     }
 }

@@ -10,30 +10,66 @@
     </head>
     
     <body>
-     
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="/assets/1601092.png" alt="Bootstrap" width="50rem">
+             </a>
+             
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </nav>
         <a href="liste-event.html" class="previous round">&#8249;</a>
-        <h2 id="event-info"> 
+        <h2 id="event-titre"> 
             ... 
         </h2>  
-        
-        
-        
-        <div id="questions"></div>
-        <div id="question-button" style="display: none;">
-            
-            <button id="question-text"class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Button with data-bs-target</button>
-
-            <div class="collapse" id="collapseExample">
-                <div class="card card-body" id="reponsesPossibles">...
-                    
-                </div>
-                <div class="question-actions">
-                    <button class="actions">Start</button>
-                    <button class="actions">Edit</button>
-                    <button class="actions">Delete</button>
+        <section>
+            <div id="eventInformation">
+                
+                <div><img class="card-img-top" id="eventImg" src="..."></div>
+                <div>
+                  <p  id="eventDescription">...</p>
+                  <p id="eventDate">...</p>
                 </div>
             </div>
-        </div>
+            
+            <div id="questions"></div>
+            <div id="question-button" style="display: none;">
+                
+                <button id="question-text"class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Button with data-bs-target</button>
+    
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body" id="reponsesPossibles">...
+                        
+                    </div>
+                    <div class="question-actions">
+                        <button class="actions">Start</button>
+                        <button class="actions">Edit</button>
+                        <button class="actions">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
 
 
 
