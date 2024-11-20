@@ -42,7 +42,10 @@
         <h2 id="event-titre"> 
             ... 
         </h2>  
+
         <section>
+
+            <!-- ALL EVENT INFO. LEFT SIDE BOX -->
             <div id="eventInformation">
                 
                 <div><img class="card-img-top" id="eventImg" src="..."></div>
@@ -52,18 +55,54 @@
                 </div>
             </div>
             
+            <!-- LIST OF THE QUESTIONS -->
             <div id="questions"></div>
             <div id="question-button" style="display: none;">
                 
-                <button id="question-text"class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Button with data-bs-target</button>
+                <button id="question-text"class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" question-id="...">Button with data-bs-target</button>
     
                 <div class="collapse" id="collapseExample">
-                    <div class="card card-body" id="reponsesPossibles">...
-                        
-                    </div>
+                    <div class="card card-body" id="reponsesPossibles">...</div>
+                    
+                    <!-- START / EDIT / DELETE BUTTONS -->
                     <div class="question-actions">
+                        <!-- START -->
                         <button class="actions">Start</button>
-                        <button class="actions">Edit</button>
+
+
+
+                        <!-- EDIT -->
+                        <button type="button" class=" actions btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel"> Modifier la question</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Nouvelle question</span>
+                                    <input type="text" class="form-control" id="input1" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" text="...">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Reponses possibles</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="" id="input2">
+                                </div>
+                                  
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retourner</button>
+                                <button type="button" class="btn btn-primary" id="soumettreBtn" ">Soumettre</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+
+                        <!-- DELETE -->
                         <button class="actions">Delete</button>
                     </div>
                 </div>

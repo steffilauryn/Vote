@@ -32,8 +32,9 @@ fetch(apiURLQuestionsPerEvent)
         const itemButton = document.getElementById('question-button');
         const itemClone = itemButton.cloneNode(true);
         itemClone.querySelector('#question-text').textContent = item.question_valeur;
+        itemClone.querySelector('#question-text').setAttribute('question-id',item.id);
         itemClone.querySelector('#reponsesPossibles').textContent = item.Reponses_Possibles;
-
+        itemClone.querySelector('#input2').setAttribute('value',item.Reponses_Possibles);
         const uniqueId = 'question' + (index + 1);
         const button = itemClone.querySelector('.btn');
         const content = itemClone.querySelector('.collapse');
