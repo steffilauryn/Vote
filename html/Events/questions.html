@@ -57,22 +57,22 @@
             
             <!-- LIST OF THE QUESTIONS -->
             <div id="questions"></div>
-            <div id="question-button" style="display: none;">
+            <div id="question-button" style="display: none;" >    <!-- DIV A --> 
                 
-                <button id="question-text"class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" question-id="...">Button with data-bs-target</button>
+                <button id="question-text" question-id="..." class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >Button with data-bs-target</button>
     
                 <div class="collapse" id="collapseExample">
-                    <div class="card card-body" id="reponsesPossibles">...</div>
+                    <div class="card card-body" id="reponsesPossibles">hi</div>
                     
                     <!-- START / EDIT / DELETE BUTTONS -->
                     <div class="question-actions">
                         <!-- START -->
-                        <button class="actions">Start</button>
+                        <button class="actions startBtn">Start</button>
 
 
 
                         <!-- EDIT -->
-                        <button type="button" class=" actions btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" class="actions btn btn-primary" id="btnEdition" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Edit
                         </button>
                         
@@ -82,20 +82,29 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="staticBackdropLabel"> Modifier la question</h1>
+                                <p id="qidandtext"> </p><!--remove later-->
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Nouvelle question</span>
-                                    <input type="text" class="form-control" id="input1" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" text="...">
+                                    <input type="text" class="form-control newQuestionInput" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" text="">
                                 </div>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">Reponses possibles</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="" id="input2">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Nouvelles réponses</span>
+                                    <input type="text" class="form-control newAnswersInput" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" text="" >
                                 </div>
-                                  
+                                <!-- <div>
+                                    <label for="newQuestion">Question:</label>
+                                    <input type="text" class="newQuestionInput" id="newQuestion">
+                                
+                                    <label for="newAnswers">Possible Answers (comma separated):</label>
+                                    <input type="text" class="newAnswersInput" id="newAnswers">
+                                    
+                                    <button id="soumettreBtn">Soumettre</button>
+                                </div> -->
                                 <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retourner</button>
-                                <button type="button" class="btn btn-primary" id="soumettreBtn" ">Soumettre</button>
+                                <button type="button" class="btn btn-primary soumettreBtn" id="soumettreBtn" >Soumettre</button>
                                 </div>
                             </div>
                             </div>
@@ -103,7 +112,11 @@
 
 
                         <!-- DELETE -->
-                        <button class="actions">Delete</button>
+                        <button class="actions deleteBtn" id="deleteBtn">Delete</button>
+                        
+                    </div>
+                    <div class="danger" style="display: none;">
+                        <p><strong>Danger!</strong> Vous allez supprimer la question. Êtes-vous certain de vouloir continuer? <button class="dangerNoteBtnOui"> Oui </button><button class="dangerNoteBtnNon"> Non </button></p>
                     </div>
                 </div>
             </div>
