@@ -47,9 +47,11 @@
         <!-- DIV OÙ LA LISTE DES ÉVÉNEMENTS VONT S'AFFICHER EN FORMAT DE CARTES.  -->
         <div id="events"></div>
         
-        <!-- LE TEMPLATE UTILISÉ POUR LA LISTE DES ÉVÉNEMENTS -->
+      <!-- LE TEMPLATE UTILISÉ POUR LA LISTE DES ÉVÉNEMENTS -->
+
         <!-- retrieveEvent ('..','..') est la fonction qui permet d'aller chercher les événements du xano -->
         <div class="card" id="eventCard" style="width: 18rem; display: none;" onclick="retrieveEvent('...','...')"> 
+
             <!-- Ça c'est le div pour le badge de la carte. Pour l'instant ça affiche l'id de l'événement et le statut de l'événement. Mais si on veut changer pour autre chose on peut. -->
             <div class="badge-container">
                 <span class="badge text-bg-primary" id="event-id">...</span>
@@ -66,6 +68,7 @@
             </div>
         </div>
 
+      <!-- JAVASCRIPT -->
          <!-- BOOTSTRAP -->
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

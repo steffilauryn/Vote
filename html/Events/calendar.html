@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Split String into List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    ul {
+      list-style-type: square;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+      color: #333;
+      display: inline-block; 
+      margin-right: 10px;    
+    }
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: #ff0000; /* Red dot */
+      border-radius: 50%;        /* Make it circular */
+      margin-right: 5px;         /* Space between dot and text */
+    }
+  </style>
+</head>
+<body>
+  <h1><span style="color:#ff0000">String to List Items</span></h1>
+  <div>
+    <label for="inputString"><span style="color:#ff0000">Enter a comma-separated string</span>:</label>
+    <input type="text" id="inputString" placeholder="e.g., a, b, c">
+    <button id="generateList"><span style="color:#ff0000">Generate List</span></button>
+  </div>
+  <div style="display:inline-block;">
+    <ul id="outputList" ></ul>
+  </div>
+
+  <script>
+    document.getElementById('generateList').addEventListener('click', function() {
+      // Get the input string
+      const inputString = document.getElementById('inputString').value;
+
+      // Split the string by commas and trim whitespace
+      const items = inputString.split(',').map(item => item.trim());
+
+      // Get the output list container
+      const outputList = document.getElementById('outputList');
+
+      // Append each item as a list item
+      items.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `<div class="dot"></div> ${item}`;
+        outputList.appendChild(listItem);
+      });
+    });
+          
+
+  </script>
+</body>
+</html>
