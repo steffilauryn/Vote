@@ -1,94 +1,126 @@
+// FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
 function getQueryParam (name){
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
 
+// CONSTANTES
 const eventId = getQueryParam('event_id');
 const eventName = getQueryParam('event_titre');
-
 const eventInfoElement = document.getElementById('event-titre');
+const questionsDiv = document.getElementById('questions');
+const createQuestion = document.getElementById('createQuestion');
 
-if (eventId && eventName) {
-    eventInfoElement.style = `text-align:center;`
-    eventInfoElement.textContent = `${eventName}`;
-} else {
-    eventInfoElement.textContent = 'No event data available.';
-}
-
-
-const apiURLQuestionsPerEvent = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`;
-fetch(apiURLQuestionsPerEvent)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+function renderQuestions(data) {
+    questionsDiv.innerHTML = '';
+    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL), AFFICHER LE TITRE ET MODIFIER LE STYLE 
+    if (data.length > 0 && data[0] !== "") {
+        eventInfoElement.style = `text-align:center;`;
+        eventInfoElement.textContent = `${eventName}`;
+    } else { // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
+        eventInfoElement.style = `text-align:center; font-size:5rem`;
+        eventInfoElement.innerText= `Aucune question assigné.`;
+        createQuestions.style = `display:block;`;
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log(data); 
-    const questionsDiv = document.getElementById('questions');
     data.forEach((item, index) => {
-
-        const itemButton = document.getElementById('question-button'); //ASSIGN TO itemButton THE DIV "A"
-        const itemClone = itemButton.cloneNode(true);  //CREATE itemButton CLONE
+        const itemButton = document.getElementById('question-button');
+        const itemClone = itemButton.cloneNode(true);  
         
-        //UNIQUE ID USED FOR ARIA-CONTROLS AND DATA-BS-TARGETS -> USED TO CONTROL COLLAPSE
+        //CONSTANTES
+        const questionId = item.id;
         const uniqueId = (index + 1);  
         const button = itemClone.querySelector('.btn');
         const content = itemClone.querySelector('.collapse');
-
+        const btnDelete = itemClone.querySelector('.btnDelete');
+        const btnEdit = itemClone.querySelector('.btnEdit');
+        const modalDelete = itemClone.querySelector('.modal.fade.deleteMod');
+        const modalEdit = itemClone.querySelector('.modal.fade.editMod.modal-lg');
+        const btnConfirmDelete = itemClone.querySelector('#confirmDelete');
+        const newAnswerInputField = itemClone.querySelector('#nouvelleReponse');
+        const newQuestionInputField = itemClone.querySelector('#nouvelleQuestion');
+        const oldAnswer = item.Reponses;
+        const btnConfirmEdit = itemClone.querySelector('#confirmEdit');
         //SET ATTRIBUTES 
         button.setAttribute('aria-controls', uniqueId); 
         button.setAttribute('data-bs-target', `#${uniqueId}`); 
         content.setAttribute('id', uniqueId); //CHANGE ID OF COLLAPSEDDIV
-        itemClone.querySelector('#question-text').setAttribute('question-id', item.id);
-       
-        //DISPLAY ANSWERS AND QUESTIONS
-        itemClone.querySelector('#reponsesPossibles').textContent = item.Reponses;
-        itemClone.querySelector('#question-text').textContent = item.question_valeur;
-        itemClone.querySelector('#qidandtext').textContent=item.id;
+        itemClone.querySelector('#question-text').setAttribute('question-id', questionId);
+        btnDelete.setAttribute('data-bs-target', `#delete${uniqueId}`); 
+        modalDelete.setAttribute('id', `delete${uniqueId}`);
+        btnEdit.setAttribute('data-bs-target', `#edit${uniqueId}`); 
+        modalEdit.setAttribute('id', `edit${uniqueId}`);
+        newAnswerInputField.setAttribute('value',oldAnswer);
 
-        //SOUMETTRE BUTTON ACTION EVENT
-        document.querySelector(".soumettreBtn").onclick = function() {  
-            const q = document.querySelector('.newQuestionInput').value; 
-            const a = document.querySelector('.newAnswersInput').value;
-            document.querySelector("#question-text").textContent = q;
-            document.querySelector("#reponsesPossibles").textContent = a; 
-            const questionId = document.getElementById('question-text').getAttribute('question-id');
-            changeQuestionAnswers (questionId, eventId, q, a);
-            console.log(questionId);
 
-        };  
+        //ulElement = div for each answer
+        //DISPLAY ANSWERS 
+        itemClone.querySelector('#reponsesPossibles').replaceChildren();
+        const answerString = item.Reponses;
+        let answerListItems = answerString.split('/').map(item=>item.trim());
+        const newListUl = document.createElement('ul');
+        for(let i =0; i<answerListItems.length;i++)
+        {
+            const newListItem = document.createElement('li'); // Create a new <li> for each item
+            newListItem.classList.add("reponsesPossiblesItem"); // Add the class
+            const newDot = document.createElement('div');
+            newDot.classList.add('smallerDot');
+            newListItem.innerHTML=`<div class="smallerDot"></div>${answerListItems[i]} `
+            newListUl.appendChild(newListItem); // Append the new <li> to the <ul>
+        }
+        itemClone.querySelector('#reponsesPossibles').appendChild(newListUl);
+        
+        //DISPLAY QUESTIONS
+        itemClone.querySelector('#test').textContent = item.question_valeur;
 
-        //DELETE BUTTON ACTION EVENT         FIX THIS
-        document.querySelector(".deleteBtn").onclick = function() {
-            document.querySelector('.danger').style="display:block;";
-        };
+        //DISPLAY QUESTION IN DELETE MODAL WINDOW
+        itemClone.querySelector('#questionInModal').textContent = item.question_valeur;
 
-        //YES DELETE QUESTION                 FIX THIS
-        document.querySelector(".dangerNoteBtnOui").onclick = function() {
-            const questionId = document.getElementById('question-text').getAttribute('question-id');
-            deleteQuestionAnswers (questionId);
-        };
-        //NO DON'T DELETE QUESTION             FIX THIS
-        document.querySelector(".dangerNoteBtnNon").onclick = function() {
-            document.querySelector('.danger').style="display:none;";
-        };
+        // DELETE QUESTION
+        btnConfirmDelete.setAttribute(
+            'onclick',
+            `deleteQuestion('${questionId}', this.closest('.question-div'))`
+        );
+        
+        // EDIT QUESTION;
+        btnConfirmEdit.setAttribute(
+            'onclick',
+            `editQuestion('${questionId}','${eventId}')`
+            //newAnswerInputField is a string not an array. idk if the format is fine but i hope so
+        );
 
-        //start button sends information to other page
-        document.querySelector(".startBtn").onclick = function() {
-          
-        };
+        // SEND QUESTION;
+        btnConfirmEdit.setAttribute(
+            'onclick',
+            `editQuestion('${questionId}','${eventId}')`
+            //newAnswerInputField is a string not an array. idk if the format is fine but i hope so
+        );
 
 
         itemClone.style.display = 'block';
         questionsDiv.appendChild(itemClone);
     });
-  })
-  .catch(error => {
-    console.error('Error fetching questions: ', error);
-  });
+}
 
+function refreshQuestions() {
+    const apiURLQuestionsPerEvent = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`;
+    
+    fetch(apiURLQuestionsPerEvent)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Fetched data: ", data); 
+        renderQuestions(data);
+    })
+    .catch(error => {
+        console.error('Error fetching questions: ', error);
+      });
+}
+
+refreshQuestions();
 
 
 //   GET EVENT DETAILS. LEFT SIDEBAR . 
@@ -140,68 +172,32 @@ fetch(apiURLEventDetails)
     console.error('Error fetching questions: ', error);
 });
 
-function fctApiURLChangeQuestion(questionId) {
-    const apiURLChangeQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question/${questionId}`;
-    return apiURLChangeQuestion;
-}
 
 function fctApiURLDeleteQuestion(questionId) {
-    const apiURLDelQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`;
-    return apiURLDelQuestion;
+    const apiURLDeleteQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`;
+    return apiURLDeleteQuestion;
 }
 
-// Example of using the returned value for a PATCH fetch
-function changeQuestionAnswers(questionId, eventId, question, answers) {
-    console.log("item id at position B : " + questionId);                  //BBBBBB
-    const apiURL = fctApiURLChangeQuestion(questionId); // Get the URL from fctApiURLChangeQuestion    
-    
-    // Data to send in the PATCH request
-    const patchData = {
-        question_id: questionId, // Replace with your actual key-value pairs
-        question_valeur: question, // Replace with your actual key-value pairs
-        event_id: eventId, // Replace with your actual key-value pairs
-        Reponses: answers, // Replace with your actual key-value pairs
-    };
-    
-    console.log('Payload:', patchData);
-
-    fetch(apiURL, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(patchData),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log('PATCH successful:', data);
-        })
-        .catch((error) => {
-            console.error('Error with PATCH request:', error);
-        });
+function fctApiURLEditQuestion(questionId) {
+    const apiURLDeleteQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`;
+    return apiURLDeleteQuestion;
 }
 
-function deleteQuestionAnswers(questionId) {
-    const apiURL = fctApiURLDeleteQuestion(questionId); // Get the URL from fctApiURLChangeQuestion
-    
-    // Data to send in the PATCH request
-    const patchData = {
-        question_id: questionId, // Replace with your actual key-value pairs
-    };
-    
-    // console.log('Payload:', patchData);
 
-    fetch(apiURL, {
+function deleteQuestion(qid, questionDiv) {
+    const apiURL = fctApiURLDeleteQuestion(qid); 
+    
+    const deleteData = {
+        questionId : qid, // Replace with your actual key-value pairs
+    };
+
+// FETCH : DELETE METHOD 
+fetch(apiURL, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(patchData),
+        body: JSON.stringify(deleteData),
     })
         .then((response) => {
             if (!response.ok) {
@@ -209,11 +205,69 @@ function deleteQuestionAnswers(questionId) {
             }
             return response.json();
         })
-        .then((data) => {
-            console.log(`Record with ID ${questionId} deleted successfully.`);
+        .then(() => {
+            // Remove the corresponding div from the DOM
+            if (questionDiv) {
+                questionDiv.remove();
+                console.log(`Removed div for question ID ${qid}`);
+            }
+            // Close the modal programmatically
+            const modal = document.querySelector('.modal.show'); // Select the currently open modal
+            if (modal) {
+                const bootstrapModal = bootstrap.Modal.getInstance(modal); // Get the Bootstrap modal instance
+                bootstrapModal.hide(); // Close the modal
+            }
+            console.log(`Record with ID ${qid} deleted successfully.`);
+
+            refreshQuestions();
         })
         .catch((error) => {
             console.error('Error with delete request:', error);
         });
 }
 
+function editQuestion(qid, eventId) {
+    const modal = document.querySelector('.modal.fade.editMod.modal-lg'); // Get the currently open modal
+    const newQuestionInputField = modal.querySelector('#nouvelleQuestion'); // Input for the updated question
+    const newAnswerInputField = modal.querySelector('#nouvelleReponse'); // Input for the updated answers
+
+    const questionVal = newQuestionInputField.value; // Get updated question value
+    const answers = newAnswerInputField.value; // Get updated answers
+
+    const apiURL = fctApiURLEditQuestion(qid); 
+    
+    const patchData = {
+        question_id : qid, // Replace with your actual key-value pairs
+        question_valeur : questionVal,
+        event_id : eventId,
+        Reponses : answers
+    };
+
+
+fetch(apiURL, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patchData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(() => {
+        console.log(`Edited question ID ${qid} with values:`, patchData);
+
+        // Close the modal programmatically        
+        if (modal) {
+            const bootstrapModal = bootstrap.Modal.getInstance(modal); // Get the Bootstrap modal instance
+            bootstrapModal.hide(); // Close the modal
+        }
+        refreshQuestions();
+    })
+    .catch((error) => {
+        console.error('Error with edit request:', error);
+    });
+}
