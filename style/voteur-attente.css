@@ -1,0 +1,80 @@
+body{
+    background-color: black;
+    color:white;
+}
+#square {
+    width: 50%;
+    height: 50%;
+    background-color: red;
+    position: absolute; /* Changed to absolute for placement relative to the image */
+    animation-name: overlayImg;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+
+  #imgTest {
+    animation-name: imageShadow;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes overlayImg {
+    0%   {
+        background-color: rgba(255, 0, 0, 0.3); left: 0%; top: 0%;
+        box-shadow: rgba(255, 0, 0, 0.3) 0px 2px 4px 0px, rgba(255, 0, 0, 0.3) 0px 2px 16px 0px;
+    }
+    25%  {
+        background-color: rgba(255, 255, 0, 0.3); left: 50%; top: 0%;
+        box-shadow: rgba(255, 255, 0, 0.3) 0px 2px 4px 0px, rgba(255, 255, 0, 0.3) 0px 2px 16px 0px;
+    }
+    50%  {
+        background-color: rgba(0, 0, 255, 0.3); left: 50%; top: 50%;
+        box-shadow: rgba(0, 0, 255, 0.3) 0px 2px 4px 0px, rgba(0, 0, 255, 0.3) 0px 2px 16px 0px;
+    }
+    75%  {
+        background-color: rgba(0, 128, 0, 0.3); left: 0%; top: 50%;
+        box-shadow: rgba(0, 128, 0, 0.3) 0px 2px 4px 0px, rgba(0, 128, 0, 0.3) 0px 2px 16px 0px;
+    }
+    100% {
+        background-color: rgba(255, 0, 0, 0.3); left: 0%; top: 0%;
+        box-shadow: rgba(255, 0, 0, 0.3) 0px 2px 4px 0px, rgba(255, 0, 0, 0.3) 0px 2px 16px 0px;
+    }
+  }
+
+  @keyframes imageShadow {
+    0%   {
+        
+        box-shadow: 0px 4px 29px 31px rgba(255, 0, 0, 0.3),
+                    25px 0px 20px -20px rgba(255, 0, 0, 0.3),
+                    0px 25px 20px -20px rgba(255, 0, 0, 0.3),
+                    -25px 0px 20px -20px rgba(255, 0, 0, 0.3);
+    }
+    25%  {
+       
+        box-shadow: 0px 4px 29px 31px rgba(255, 255, 0, 0.3),
+        25px 0px 20px -20px rgba(255, 255, 0, 0.3),
+        0px 25px 20px -20px rgba(255, 255, 0, 0.3),
+        -25px 0px 20px -20px rgba(255, 255, 0, 0.3);
+    }
+    50%  {
+        
+        box-shadow: 0px 4px 29px 31px rgba(0, 0, 255, 0.3),
+        25px 0px 20px -20px rgba(0, 0, 255, 0.3),
+        0px 25px 20px -20px rgba(0, 0, 255, 0.3),
+        -25px 0px 20px -20px rgba(0, 0, 255, 0.3);
+    }
+    75%  {
+        
+        box-shadow: 0px 4px 29px 31px rgba(0, 128, 0, 0.3),
+        25px 0px 20px -20px rgba(0, 128, 0, 0.3),
+        0px 25px 20px -20px rgba(0, 128, 0, 0.3),
+        -25px 0px 20px -20px rgba(0, 128, 0, 0.3);
+    }
+    100% {
+        box-shadow: 0px 4px 29px 31px rgba(255, 0, 0, 0.3),
+        25px 0px 20px -20px rgba(255, 0, 0, 0.3),
+        0px 25px 20px -20px rgba(255, 0, 0, 0.3),
+        -25px 0px 20px -20px rgba(255, 0, 0, 0.3);
+    }
+  }
+  
