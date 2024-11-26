@@ -4,28 +4,31 @@ function getQueryParam (name){
     return urlParams.get(name);
 }
 
+
 // CONSTANTES
 const eventId = getQueryParam('event_id');
 const eventName = getQueryParam('event_titre');
 const eventInfoElement = document.getElementById('event-titre');
 const questionsDiv = document.getElementById('questions');
 
-function renderQuestions(data) {
+function renderQuestions(data)
+{
+    console.log("renderQuestions function data: ", data);  //data = list of questions
     questionsDiv.innerHTML = '';
     
-    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL), AFFICHER LE TITRE ET MODIFIER LE STYLE 
+    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL)
+    // AFFICHER LE TITRE ET MODIFIER LE STYLE 
+    // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
     if (data.length > 0 && data[0] !== "") {
         eventInfoElement.style = `text-align:center;`;
         eventInfoElement.textContent = `${eventName}`;
-        
-
-    } else { // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
+    } else { 
         eventInfoElement.style = `text-align:center; font-size:5rem`;
         eventInfoElement.innerText= `Aucune question assigné.`;
     }
 
-
     data.forEach((item, index) => {
+        // console.log("data.forEach item :", item , "index is :", index);
         const itemButton = document.getElementById('question-button');
         const itemClone = itemButton.cloneNode(true);  
         
@@ -42,6 +45,10 @@ function renderQuestions(data) {
         const newAnswerInputField = itemClone.querySelector('#nouvelleReponse');
         const oldAnswer = item.Reponses;
         const btnConfirmEdit = itemClone.querySelector('#confirmEdit');
+        const btnLaunchQuestion = itemClone.querySelector('#btnLaunchQuestion');
+
+
+
 
         //SET ATTRIBUTES 
         button.setAttribute('aria-controls', uniqueId); 
@@ -53,7 +60,6 @@ function renderQuestions(data) {
         btnEdit.setAttribute('data-bs-target', `#edit${uniqueId}`); 
         modalEdit.setAttribute('id', `edit${uniqueId}`);
         newAnswerInputField.setAttribute('value',oldAnswer);
-
 
         //ulElement = div for each answer
         //DISPLAY ANSWERS 
@@ -75,7 +81,7 @@ function renderQuestions(data) {
 
 
         //DISPLAY QUESTIONS
-        itemClone.querySelector('#test').textContent = item.question_valeur;
+        itemClone.querySelector('#q').textContent = item.question_valeur;
 
 
         //DISPLAY QUESTION IN DELETE MODAL WINDOW
@@ -92,21 +98,12 @@ function renderQuestions(data) {
         btnConfirmEdit.setAttribute(
             'onclick',
             `editQuestion('${questionId}','${eventId}')`
-
         );
 
-        
-
-        // SEND QUESTION --> CHANGE THE PARAMETERS! I JUST COPIED IT FROM THE EDITQUESTION FUNCTION
-        // btnConfirmLaunch.setAttribute(
-        //     'onclick',
-        //     `sendQuestion('${questionId}','${eventId}')`
-        // );
-
-        // btnGoLive.setAttribute(
-        //     'onclick',
-        //     `eventLive('${eventId}')`
-        // );
+        btnLaunchQuestion.setAttribute(
+            'onclick',
+            `launchQuestion('${questionId}')`
+        );
 
         itemClone.style.display = 'block';
         questionsDiv.appendChild(itemClone);
@@ -136,7 +133,35 @@ function refreshQuestions() {
 
 refreshQuestions();
 
-
+// GET
+function launchQuestion(qid){
+    const apiurl = fctApiURLGetQuestion(qid);
+    fetch(apiurl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+    })
+    .then (data=>{
+        console.log(data);
+        if(data.launch_status==='Idle')
+        {
+            // make button text turn into Stop
+        }   
+        else if(data.launch_status==='Live')
+        {
+            // turn status into launched
+            // disable all buttons
+        }
+        else{
+            //disable button
+        }
+    })
+    .catch(error=>{
+        console.error('Error fetching questions: ', error);
+    });
+}
 //   GET EVENT DETAILS. LEFT SIDEBAR . 
 const apiURLEventDetails = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`;
 fetch(apiURLEventDetails)
@@ -152,7 +177,6 @@ fetch(apiURLEventDetails)
     section.querySelector('#eventDescription').textContent=data.description;
     const timestampStart = data.date_heure_debut;
     const timestampEnd = data.date_heure_fin;
-    const btnConfirmLaunch = document.getElementById('launchEvent');
 
     const dateStart = new Date(timestampStart);
     const dateEnd = new Date(timestampEnd);
@@ -178,16 +202,6 @@ fetch(apiURLEventDetails)
              clientLogoElement.src = clientLogoURL;
          }
     }
-    // const eventStatus = data.statut;
-    // if(eventStatus === "Planifié"){
-    //     btnConfirmLaunch.innerText = "Go live";
-    // }
-    // else if (eventStatus === "En direct"){
-    //     btnConfirmLaunch.innerText = "End live";
-    // }
-    // else{
-    //     btnConfirmLaunch.disabled = true;
-    // }
 })
 .catch(error=>{
     console.error('Error fetching questions: ', error);
@@ -200,15 +214,14 @@ function fctApiURLDeleteQuestion(questionId) {
 }
 
 function fctApiURLEditQuestion(questionId) {
-    const apiURLDeleteQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`;
-    return apiURLDeleteQuestion;
+    const apiURL = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`;
+    return apiURL;
 }
 
-// function fctApiURLEventLive(eventId) {
-//     const apiURL = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/statutEnDirect/${eventId}`;
-//     return apiURL;
-// }
-
+function fctApiURLGetQuestion(questionId){
+    const apiURL = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`;
+    return apiURL;
+}
 
 // DELETE 
 function deleteQuestion(qid, questionDiv) {
@@ -262,43 +275,42 @@ function editQuestion(qid, eventId) {
 
     const questionVal = newQuestionInputField.value; // Get updated question value
     const answers = newAnswerInputField.value; // Get updated answers
-
     const apiURL = fctApiURLEditQuestion(qid); 
-    
+    console.log("url : ",apiURL);
+
     const patchData = {
-        question_id : qid, // Replace with your actual key-value pairs
-        question_valeur : questionVal,
-        event_id : eventId,
-        Reponses : answers
+        question_id: parseInt(qid, 10),
+        question_valeur: questionVal,
+        event_id: parseInt(eventId, 10),
+        Reponses: answers
     };
 
+    console.log("Patch data being sent:", patchData);
+
     fetch(apiURL, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(patchData),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(() => {
-            console.log(`Edited question ID ${qid} with values:`, patchData);
-            
-            // if (modal) {
-            //     const bootstrapModal = bootstrap.Modal.getInstance(modal);
-            //     if (bootstrapModal) {
-            //         bootstrapModal.hide();
-            //     }
-            // } else {
-            //     console.error('No modal is currently open.');
-            // }
-            refreshQuestions();
-        })
-        .catch((error) => {
-            console.error('Error with edit request:', error);
-        });
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patchData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(() => {
+        console.log(`Edited question ID ${qid} with values:`, patchData);
+        // Close the modal programmatically        
+        if (modal) {
+            const bootstrapModal = bootstrap.Modal.getInstance(modal); // Get the Bootstrap modal instance
+            bootstrapModal.hide(); // Close the modal
+        }
+        refreshQuestions();
+    })
+    .catch((error) => {
+        console.error('Error with edit request:', error);
+    });
 }
+
