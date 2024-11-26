@@ -132,8 +132,19 @@ section {
     border-radius: 50%;        /* Make it circular */
     margin-right: 5px;  
 }
-
-
+.pageHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#createQuestions
+{
+    width: fit-content;
+}
+.btns{
+    margin: 0.5rem;
+}
 /* MOBILE */
 @media only screen and (max-width: 426px) {
     .previous{
