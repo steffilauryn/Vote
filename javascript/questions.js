@@ -1,170 +1,31 @@
+const API_ENDPOINTS = {
+    apiURLGetQuestionsPerEvent: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
+    apiURLGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`,
+    apiURLDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,
+    apiURLPatchQuestion: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`,
+    apiURLGetQuestionStatus: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`
+};
+
 // FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
 function getQueryParam (name){
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
 
+// CONSTANTES FROM URL
+const eventId = getQueryParam('event_id'); //eventId from url
+const eventName = getQueryParam('event_titre'); //event title from url
 
-// CONSTANTES
-const eventId = getQueryParam('event_id');
-const eventName = getQueryParam('event_titre');
+// this is the div holding the title and the start live and end live buttons
 const eventInfoElement = document.getElementById('event-titre');
-const questionsDiv = document.getElementById('questions');
 
-function renderQuestions(data)
-{
-    console.log("renderQuestions function data: ", data);  //data = list of questions
-    questionsDiv.innerHTML = '';
-    
-    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL)
-    // AFFICHER LE TITRE ET MODIFIER LE STYLE 
-    // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
-    if (data.length > 0 && data[0] !== "") {
-        eventInfoElement.style = `text-align:center;`;
-        eventInfoElement.textContent = `${eventName}`;
-    } else { 
-        eventInfoElement.style = `text-align:center; font-size:5rem`;
-        eventInfoElement.innerText= `Aucune question assigné.`;
-    }
-
-    data.forEach((item, index) => {
-        // console.log("data.forEach item :", item , "index is :", index);
-        const itemButton = document.getElementById('question-button');
-        const itemClone = itemButton.cloneNode(true);  
-        
-        //CONSTANTES
-        const questionId = item.id;
-        const uniqueId = (index + 1);  
-        const button = itemClone.querySelector('.btn');
-        const content = itemClone.querySelector('.collapse');
-        const btnDelete = itemClone.querySelector('.btnDelete');
-        const btnEdit = itemClone.querySelector('.btnEdit');
-        const modalDelete = itemClone.querySelector('.modal.fade.deleteMod');
-        const modalEdit = itemClone.querySelector('.modal.fade.editMod.modal-lg');
-        const btnConfirmDelete = itemClone.querySelector('#confirmDelete');
-        const newAnswerInputField = itemClone.querySelector('#nouvelleReponse');
-        const oldAnswer = item.Reponses;
-        const btnConfirmEdit = itemClone.querySelector('#confirmEdit');
-        const btnLaunchQuestion = itemClone.querySelector('#btnLaunchQuestion');
-
-
-
-
-        //SET ATTRIBUTES 
-        button.setAttribute('aria-controls', uniqueId); 
-        button.setAttribute('data-bs-target', `#${uniqueId}`); 
-        content.setAttribute('id', uniqueId); //CHANGE ID OF COLLAPSEDDIV
-        itemClone.querySelector('#question-text').setAttribute('question-id', questionId);
-        btnDelete.setAttribute('data-bs-target', `#delete${uniqueId}`); 
-        modalDelete.setAttribute('id', `delete${uniqueId}`);
-        btnEdit.setAttribute('data-bs-target', `#edit${uniqueId}`); 
-        modalEdit.setAttribute('id', `edit${uniqueId}`);
-        newAnswerInputField.setAttribute('value',oldAnswer);
-
-        //ulElement = div for each answer
-        //DISPLAY ANSWERS 
-        itemClone.querySelector('#reponsesPossibles').replaceChildren();
-        const answerString = item.Reponses;
-        let answerListItems = answerString.split('/').map(item=>item.trim());
-        const newListUl = document.createElement('ul');
-        for(let i =0; i<answerListItems.length;i++)
-        {
-            const newListItem = document.createElement('li'); // Create a new <li> for each item
-            newListItem.classList.add("reponsesPossiblesItem"); // Add the class
-            const newDot = document.createElement('div');
-            newDot.classList.add('smallerDot');
-            newListItem.innerHTML=`<div class="smallerDot"></div>${answerListItems[i]} `
-            newListUl.appendChild(newListItem); // Append the new <li> to the <ul>
-        }
-        itemClone.querySelector('#reponsesPossibles').appendChild(newListUl);
-        
-
-
-        //DISPLAY QUESTIONS
-        itemClone.querySelector('#q').textContent = item.question_valeur;
-
-
-        //DISPLAY QUESTION IN DELETE MODAL WINDOW
-        itemClone.querySelector('#questionInModal').textContent = item.question_valeur;
-
-
-        // DELETE QUESTION
-        btnConfirmDelete.setAttribute(
-            'onclick',
-            `deleteQuestion('${questionId}', this.closest('.question-div'))`
-        );
-        
-        // EDIT QUESTION;
-        btnConfirmEdit.setAttribute(
-            'onclick',
-            `editQuestion('${questionId}','${eventId}')`
-        );
-
-        btnLaunchQuestion.setAttribute(
-            'onclick',
-            `launchQuestion('${questionId}')`
-        );
-
-        itemClone.style.display = 'block';
-        questionsDiv.appendChild(itemClone);
-    });
-}
-
-
-
-function refreshQuestions() {
-    const apiURLQuestionsPerEvent = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`;
-    
-    fetch(apiURLQuestionsPerEvent)
-    .then(response => {
-        if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Fetched data: ", data); 
-        renderQuestions(data);
-    })
-    .catch(error => {
-        console.error('Error fetching questions: ', error);
-      });
-}
+//this is the main div encompassing all the questions
+const questionsDiv = document.getElementById('questions'); 
 
 refreshQuestions();
 
-// GET
-function launchQuestion(qid){
-    const apiurl = fctApiURLGetQuestion(qid);
-    fetch(apiurl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-          }
-          return response.json();
-    })
-    .then (data=>{
-        console.log(data);
-        if(data.launch_status==='Idle')
-        {
-            // make button text turn into Stop
-        }   
-        else if(data.launch_status==='Live')
-        {
-            // turn status into launched
-            // disable all buttons
-        }
-        else{
-            //disable button
-        }
-    })
-    .catch(error=>{
-        console.error('Error fetching questions: ', error);
-    });
-}
-//   GET EVENT DETAILS. LEFT SIDEBAR . 
-const apiURLEventDetails = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`;
-fetch(apiURLEventDetails)
+// GET EVENT DETAILS. LEFT SIDEBAR . 
+fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
 .then(response => {
     if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
@@ -173,7 +34,7 @@ fetch(apiURLEventDetails)
 })
 .then (data=>{
     console.log(data);
-    const section = document.getElementById('eventInformation');
+    const section = document.getElementById('event-information');
     section.querySelector('#eventDescription').textContent=data.description;
     const timestampStart = data.date_heure_debut;
     const timestampEnd = data.date_heure_fin;
@@ -208,31 +69,36 @@ fetch(apiURLEventDetails)
 });
 
 
-function fctApiURLDeleteQuestion(questionId) {
-    const apiURLDeleteQuestion = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`;
-    return apiURLDeleteQuestion;
-}
+// FONCTIONS 
+// 1. launchQuestion(qid) : Appelé quand le bouton launch de la question est appuyé.  
+//      
 
-function fctApiURLEditQuestion(questionId) {
-    const apiURL = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`;
-    return apiURL;
-}
 
-function fctApiURLGetQuestion(questionId){
-    const apiURL = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`;
-    return apiURL;
+function launchQuestion(qid){
+    fetch(API_ENDPOINTS.apiURLGetQuestionStatus(qid))
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+    })
+    .then (data=>{
+        console.log(data);
+    })
+    .catch(error=>{
+        console.error('Error fetching questions: ', error);
+    });
 }
 
 // DELETE 
 function deleteQuestion(qid, questionDiv) {
-    const apiURL = fctApiURLDeleteQuestion(qid); 
-    
+
     const deleteData = {
         questionId : qid, // Replace with your actual key-value pairs
     };
 
  
-    fetch(apiURL, {
+    fetch(API_ENDPOINTS.apiURLDeleteQuestion(qid), {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -258,8 +124,10 @@ function deleteQuestion(qid, questionDiv) {
                     bootstrapModal.hide(); // Close the modal
                 }
                 console.log(`Record with ID ${qid} deleted successfully.`);
-
+                console.log("Call refreshQuestions");
                 refreshQuestions();
+                
+
             })
             .catch((error) => {
                 console.error('Error with delete request:', error);
@@ -270,24 +138,24 @@ function deleteQuestion(qid, questionDiv) {
 // PATCH
 function editQuestion(qid, eventId) {
     const modal = document.querySelector('.modal.fade.editMod.modal-lg'); // Get the currently open modal
-    const newQuestionInputField = modal.querySelector('#nouvelleQuestion'); // Input for the updated question
-    const newAnswerInputField = modal.querySelector('#nouvelleReponse'); // Input for the updated answers
-
-    const questionVal = newQuestionInputField.value; // Get updated question value
-    const answers = newAnswerInputField.value; // Get updated answers
-    const apiURL = fctApiURLEditQuestion(qid); 
-    console.log("url : ",apiURL);
-
+    const newQuestionValue = modal.querySelector('#nouvelleQuestion').value; // Input for the updated question
+    const newAnswerValue = modal.querySelector('#nouvelleReponse').value; // Input for the updated answers
+    const submitButton = modal.querySelector('#soumettreEdit');
+    const alertPop = document.querySelector('.alert.alert-success');
     const patchData = {
-        question_id: parseInt(qid, 10),
-        question_valeur: questionVal,
-        event_id: parseInt(eventId, 10),
-        Reponses: answers
+        // question_id: parseInt(qid, 10),
+        // question_valeur: newQuestionValue,
+        // event_id: parseInt(eventId, 10),
+        // Reponses: newAnswerValue
+        question_id: qid,
+        question_valeur: newQuestionValue,
+        event_id: eventId,
+        Reponses: newAnswerValue
     };
 
     console.log("Patch data being sent:", patchData);
 
-    fetch(apiURL, {
+    fetch(API_ENDPOINTS.apiURLPatchQuestion(qid), {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -302,15 +170,151 @@ function editQuestion(qid, eventId) {
     })
     .then(() => {
         console.log(`Edited question ID ${qid} with values:`, patchData);
-        // Close the modal programmatically        
-        if (modal) {
-            const bootstrapModal = bootstrap.Modal.getInstance(modal); // Get the Bootstrap modal instance
-            bootstrapModal.hide(); // Close the modal
-        }
+        // Inform the user to close the modal manually
+        alert("Votre question a été changé avec succès");
+        console.log("Call refreshQuestions");
         refreshQuestions();
+        console.log("RefreshQuestions called");
+
     })
     .catch((error) => {
         console.error('Error with edit request:', error);
     });
 }
 
+function renderQuestions(data)
+{
+    console.log("renderQuestions function data: ", data);  //data = list of questions
+    questionsDiv.innerHTML = '';
+    
+    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL)
+    // AFFICHER LE TITRE ET MODIFIER LE STYLE 
+    // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
+    // id de eventInfoElement : 'event-titre'
+    if (data.length > 0 && data[0] !== "") {
+        eventInfoElement.style = `text-align:center;`;
+        eventInfoElement.innerHTML = `
+                                        ${eventName} 
+                                        <div style="width: 100vw;">
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)"id="startBtn" class="btnPlayStop">
+                                                    <i class ="bi bi-play-fill playEvent">START LIVE</i>
+                                                </button>
+                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)" id="stopBtn" class="btnPlayStop">
+                                                    <i class="bi bi-stop-fill stopEvent">STOP LIVE</i>
+                                                </button>
+                                            </div>
+                                        </div>`;
+    } else { 
+        eventInfoElement.style = `text-align:center; font-size:5rem`;
+        eventInfoElement.innerText= `Aucune question assigné.`;
+    }
+
+    data.forEach((item, index) => {
+        const itemButton = document.getElementById('question-button-template');
+        const itemClone = itemButton.cloneNode(true);  
+
+    //CONSTANTES
+        const uniqueId = (index + 1); 
+        const questionId = item.id;
+
+    // QUERY SELECTORS
+        //1. questionValeur : <div> où la question s'affichera.  
+        //2. questionValeurText : <p> où la question s'affichera. Valeur est pris directement de xano
+        //4. btnCollapse : <div> de type button qui gère la fonction collapse
+        //5. collapseDiv : section qui collapse où on retrouve les réponses possibles
+        //6. questionEditBtn : le <button> qui edit les questions
+        //7. modalEdit : <div> modal qui ouvre quand le bouton questionEditBtn est appuyé
+        //8. questionDeleteBtn : le <button> qui delete les questions
+        //9. modalDelete : <div> modal qui ouvre quand le bouton questionDeleteBtn est appuyé
+        //10. newAnswerInputField : This is the input field where the new answers dans le format a / b / c ... 
+        //11. oldAnswer : this is the answer currently found in xano (before any edits are made)
+        //12. btnConfirmEdit : this is the submit button in the modalEdit window
+        //13. reponsesString : les reponses tels que retrouvé dans xano
+        //14. reponsesValeurDiv : this is the div where the answers go
+
+        const questionValeurDiv = itemClone.querySelector('#question-text-div');
+        const questionValeur = itemClone.querySelector('#question-text');
+
+        const buttonCollapse = itemClone.querySelector('.btn');
+        const collapseDiv = itemClone.querySelector('.collapse');
+        const questionEditBtn = itemClone.querySelector('.btnEdit');
+        const modalEdit = itemClone.querySelector('.modal.fade.editMod.modal-lg');
+        const questionDeleteBtn = itemClone.querySelector('.btnDelete');
+        const modalDelete = itemClone.querySelector('.modal.fade.deleteMod');
+        const newAnswerInputField = itemClone.querySelector('#nouvelleReponse');
+        const oldAnswer = item.Reponses;
+        const btnConfirmEdit = itemClone.querySelector('#soumettreEdit');
+        const btnConfirmDelete = itemClone.querySelector('#soumettreDelete');
+        const reponsesValeurDiv = itemClone.querySelector('#reponsesPossibles')
+        const reponsesString = item.Reponses;
+        let answerListItems = reponsesString.split('/').map(item=>item.trim());
+        const newListUl = document.createElement('ul');
+        const questionSupprimer = itemClone.querySelector('#questionInModal');
+
+    //SET ATTRIBUTES 
+        questionValeurDiv.setAttribute('question-id', questionId);
+        buttonCollapse.setAttribute('aria-controls', `collapse${uniqueId}`);  //ex: aria-controls="collapse1"
+        buttonCollapse.setAttribute('data-bs-target', `#collapse${uniqueId}`);  //ex: data-bs-target="#collapse1"
+        collapseDiv.setAttribute('id', `collapse${uniqueId}`); //ex: id = "collapse1"
+        questionEditBtn.setAttribute('data-bs-target', `#editQuestion${uniqueId}`); //ex: data-bs-target= "#editQuestion1"
+        questionDeleteBtn.setAttribute('data-bs-target', `#deleteQuestion${uniqueId}`); //ex: data-bs-target= "#deleteQuestion1"
+        modalEdit.setAttribute('id', `editQuestion${uniqueId}`); //ex: id = "editQuestion1"
+        modalDelete.setAttribute('id', `deleteQuestion${uniqueId}`);  //ex: id = "deleteQuestion1"
+        newAnswerInputField.setAttribute('value',oldAnswer); //put the old answer in the answer input field (in case we want to keep the old answers)
+    
+    //INNERTEXT & TEXTCONTENT
+        questionValeur.innerText = item.question_valeur; //DISPLAY QUESTION INSIDE EACH QUESTION BUTTON
+        questionSupprimer.textContent = item.question_valeur; //DISPLAY QUESTION IN DELETE MODAL WINDOW
+
+    //DISPLAY ANSWERS 
+        reponsesValeurDiv.replaceChildren();
+        for(let i =0; i<answerListItems.length;i++)
+        {
+            const newListItem = document.createElement('li'); // Create a new <li> for each item
+            newListItem.classList.add("reponsesPossiblesItem"); // Add the class
+            const newDot = document.createElement('div');
+            newDot.classList.add('smallerDot');
+            newListItem.innerHTML=`<div class="smallerDot"></div>${answerListItems[i]} `
+            newListUl.appendChild(newListItem); // Append the new <li> to the <ul>
+        }
+        reponsesValeurDiv.appendChild(newListUl);
+    
+    //ONCLICK
+        // DELETE QUESTION
+        btnConfirmDelete.setAttribute(
+            'onclick',
+            `deleteQuestion('${questionId}', this.closest('.question-div'))`
+        );
+        
+        // EDIT QUESTION;
+        btnConfirmEdit.setAttribute(
+            'onclick',
+            `editQuestion('${questionId}','${eventId}')`
+        );
+
+        itemClone.style.display = 'block';
+        questionsDiv.appendChild(itemClone);
+    });
+}
+
+
+
+function refreshQuestions() {    
+    fetch(API_ENDPOINTS.apiURLGetQuestionsPerEvent(eventId))
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Questions being refreshed");
+            console.log("Fetched data: ", data); 
+            renderQuestions(data);
+            console.log("Questions successfully refreshed");
+        })
+        .catch(error => {
+            console.error('Error fetching questions: ', error);
+        });
+}
