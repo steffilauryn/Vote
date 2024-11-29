@@ -1,0 +1,87 @@
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  #parent{
+    display: flex;
+    height: 100vh; 
+    justify-content: center; 
+    align-items: center;
+  }
+
+  #box{
+    display:grid; 
+    margin:0 5rem;
+    box-shadow: rgba(78, 78, 246, 0.1) 0px 8px 24px, rgba(70, 70, 167, 0.1) 0px 16px 56px, rgba(17, 17, 232, 0.1) 0px 24px 80px;
+  }
+
+  #imgDiv{
+    display:flex; 
+    align-items: center;
+  }
+
+  #imgDiv>img{
+    width: 100%;
+  }
+
+  #innerBox2{
+    display: flex; 
+    flex-direction:column;
+    text-align: center;
+  }
+
+  #child1{
+    display: flex;
+    flex:2.5; 
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media only screen and (min-width: 1400px) {
+    #parent{
+      flex-direction: row; 
+    }
+
+    #box{
+      display:grid; 
+      grid-template-columns: 25% 75%; 
+    }
+
+    #imgDiv{
+      max-width: 25vw;
+    }
+  }
+
+
+  @media only screen and (max-width: 1400px) {
+    #parent{
+      flex-direction: row; 
+    }
+    #box{
+      display:grid; 
+      grid-template-columns: 50% 50%; 
+    }
+
+    #imgDiv{
+      max-width: 50vw;
+      place-self: center;
+    }
+  }
+
+  @media only screen and (max-width: 1200px) {
+    #parent{
+      flex-direction: column;     
+    }
+    #box{
+      display:flex; 
+      flex-direction: column; 
+    }
+
+    #imgDiv{
+      max-width: 50vw;
+      place-self: center;
+    }
+  }

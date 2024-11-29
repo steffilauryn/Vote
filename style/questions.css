@@ -172,8 +172,19 @@ section {
     pointer-events: none;
     opacity: 0.5;
     cursor: not-allowed;
+    cursor:none;
   }
 
+#questions {
+    flex: 1; /* Take the remaining 80% */
+}
+
+.Stop{
+    background-color: rgb(255, 115, 115);
+}
+.Play{
+    background-color: rgb(47, 134, 47);
+}
 /* MOBILE */
 @media only screen and (max-width: 426px) {
     .previous{
@@ -188,11 +199,13 @@ section {
        width: 100%;
        justify-self: center; /* Horizontal alignment */
        align-self: center;   /* Vertical alignment */
-       
     }
+
     #event-information{
         display: none;
     }
+
+    
 }
 
 /* laptops and higher */
@@ -207,9 +220,5 @@ section {
         max-height: max-content;
         background-color: #f9f9f9; /* Optional: Background color */
         margin : 2rem;
-    }
-
-    #questions {
-        flex: 1; /* Take the remaining 80% */
     }
 }

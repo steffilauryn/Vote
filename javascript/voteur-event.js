@@ -5,6 +5,7 @@ function getQueryParam (name){
 
 const clientId = getQueryParam ('client_id');
 const eventId = getQueryParam ('event_id');
+const voterId = getQueryParam ('voter_id');
 const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`;
 
 console.log(apiUrl);
@@ -31,13 +32,13 @@ fetch(apiUrl)
         }
 
         if(data.statut==="En direct"){
-            document.getElementById("enterEventSpace").disabled = false;
-            document.getElementById("messagePatienter").style="display:false;"
-            document.getElementById('enterEventSpace').setAttribute('onclick', `window.location.href = 'voteur-attente.html?event_id=${data.id}&client_id=${data.client_id}'`);
+            document.getElementById("enterEventSpace").classList.remove('disabled');
+            document.getElementById("messagePatienter").style.display='none';
+            document.getElementById('enterEventSpace').setAttribute('onclick', `window.location.href = 'voteur-attente.html?event_id=${data.id}&client_id=${data.client_id}&vid=${voterId}'`);
 
          }else{
-            document.getElementById("enterEventSpace").disabled = true;
-            document.getElementById("messagePatienter").style="display:true;"
+            document.getElementById("enterEventSpace").classList.add('disabled');            
+            document.getElementById("messagePatienter").style.display='true';
          }
     })
     .catch(error => {

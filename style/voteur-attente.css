@@ -16,7 +16,24 @@ body{
     animation-name: imageShadow;
     animation-duration: 4s;
     animation-iteration-count: infinite;
+    width: 300px; height: 300px;
   }
+
+  #messageDiv{
+    display:flex;
+    position:absolute; 
+    justify-content: center;
+    align-items:center;
+    width: 100vw;
+    height: 25%;
+}
+
+#imgContainer{
+    display: flex; 
+    position: relative;
+    align-items: center; 
+    justify-content: center;
+}
   
   @keyframes overlayImg {
     0%   {
@@ -77,4 +94,54 @@ body{
         -25px 0px 20px -20px rgba(255, 0, 0, 0.3);
     }
   }
+  
+
+  @media only screen and (max-width: 500px) {
+    #messageDiv{
+        display:none;
+        height: 0%;
+    }
+    #imgContainer{
+        height: 100vh; 
+    }
+
+    #imgTest{
+        width: 10rem;
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    #messageDiv{
+        display:none;
+        height: 0%;
+    }
+    #imgContainer{
+        height: 100vh; 
+    }
+    #imgTest {
+        animation-name: imageShadow;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        width: 35rem; 
+        height: auto;
+      }
+  }
+
+  @media only screen and (min-width : 900px) {
+    h5{
+        font-size: 2rem;
+        font-weight: bold;
+        color:red;
+    }
+    #imgContainer{
+        height: 100vh; 
+    }
+    #imgTest {
+        animation-name: imageShadow;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        width: 50rem; 
+        height: auto;
+      }
+  }
+
   

@@ -10,16 +10,22 @@
     </head>
     
     <body>
-
-        <div id="code-box">
-            <h2>Entrer le code:</h2>
-            <input id="enterCode" type="text" placeholder="00000" />
-            <p id="error-message" style="display: none;"> Code invalide. Veuillez réessayer. </p>
-            <button id="submitButton" type="submit">Soumettre</button>
-        </div>
-
+        <form>
+            <label for="username">Votre courriel</label>
+            <input type="text" placeholder="Courriel" id="courriel">
+            <label for="password">Code d'entrée</label>
+            <p id="error-message" style="display:none;">Erreur! Ce code n'est pas valide. Veuillez reessayer de nouveau ou contacter l'organisation de l'evenement.</p>
+            <input type="password" placeholder="*****" id="enterCode">
+            <button id="submitButton" type="button" onclick="verifyCode()"> Entrer </button>
+        </form>
+        
+        <div id="alertePasLive">  </div>
         <!-- BOOTSTRAP -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <div class="spinner-border text-primary" id="spinner" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
 
         <!-- Link to the external JavaScript file -->
        <!-- <script src="/javascript/liste-event.js"></script> -->

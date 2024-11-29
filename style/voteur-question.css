@@ -1,0 +1,22 @@
+.grid-container > .grid-item:last-child {
+    grid-column: span 2; /* Make the last item span both columns */
+    justify-self: center; /* Center it horizontally */
+  }
+
+  #parent{
+    background-color: rgb(0, 255, 0); display: grid;grid-template-columns: repeat(2, 1fr); gap: 16px; height:50vh;justify-content: center; flex:1; margin:1rem; 
+  }
+
+  /* MOBILE */
+@media only screen and (max-width: 600px) {
+    
+  #parent{
+    background-color: rgb(0, 255, 0); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex:1; 
+    margin:1rem; 
+  }
+    
+}
