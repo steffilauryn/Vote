@@ -144,6 +144,8 @@ function renderQuestions(data)
         reponsesValeurDiv.appendChild(newListUl);
     
     const editBtn = itemClone.querySelector('#toggleButton');
+
+    itemClone.querySelector('.offcanvasEdit').setAttribute('id',`offcanvasEdit${uniqueId}`);
     //ONCLICK
         // DELETE QUESTION
         btnConfirmDelete.setAttribute(
@@ -151,10 +153,15 @@ function renderQuestions(data)
             `deleteQuestion('${questionId}', this.closest('.question-div'))`
         );
 
+        // editBtn.setAttribute(
+        //     'onclick',
+        //     `openOffCanvas("${questionValeur.innerHTML}", this.closest('#question-button-template'))`
+        // );
         editBtn.setAttribute(
             'onclick',
-            `openOffCanvas("${questionValeur.innerHTML}", this.closest('#question-button-template'))`
+            `openOffCanvas("${questionValeur.innerHTML}", "offcanvasEdit${uniqueId}", this.closest('#question-button-template'))`
         );
+        
         
         btnLaunchQuestion.addEventListener('click', () => {
             launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
@@ -387,18 +394,39 @@ function titlePage(nbrQuestions, list,eid){
     });
 }
 
-function openOffCanvas(questionOG, item){
-    document.getElementById('offcanvasEdit').classList.add('open');
-    document.getElementById('oldquestion').innerText = questionOG;
-    const submit = item.querySelector('#submitBtn');
+// function openOffCanvas(questionOG, item){
+//     document.getElementById('offcanvasEdit').classList.add('open');
+//     document.getElementById('oldquestion').innerText = questionOG;
+//     const submit = item.querySelector('#submitBtn');
+//     submit.setAttribute(
+//         'onclick',
+//         `editQuestion(this.closest('#question-button-template'))`
+//     );
+//     console.log(item.innerHTML);
+// }
+
+function openOffCanvas(questionOG, offCanvasId, item) {
+    // console.log(item.innerHTML);
+    const offCanvas = document.getElementById(offCanvasId);
+    if (!offCanvas) {
+        console.error(`Offcanvas with ID ${offCanvasId} not found.`);
+        return;
+    }
+    offCanvas.classList.add('open');
+    offCanvas.querySelector('#oldquestion').innerText = questionOG;
+
+    const submit = item.querySelector(`#${offCanvasId} #submitBtn`);
     submit.setAttribute(
         'onclick',
-        `editQuestion(this.closest('#question-button-template'))`
+        `editQuestion(this.closest('#question-button-template'),${offCanvasId})`
     );
     console.log(item.innerHTML);
 }
 
-function editQuestion(item){
+
+function editQuestion(item,offCanvasId){
+    console.log(offCanvasId.id);
+    console.log(offCanvasId);
     // console.log('in editQuestion: ',item.innerHTML);
     const newQ = item.querySelector('#newQuestion').value;
     const newA = item.querySelector('#newAnswer').value;

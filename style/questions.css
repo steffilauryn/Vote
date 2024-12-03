@@ -196,7 +196,7 @@ section {
 }
 
 
-#offcanvasEdit {
+.offcanvasEdit {
     position: fixed;
     top: 0;
     left: -250px;
@@ -209,7 +209,7 @@ section {
     transition: left 0.3s ease;
     }
     
-    #offcanvasEdit.open {
+    .offcanvasEdit.open {
     left: 0;
     }
 
