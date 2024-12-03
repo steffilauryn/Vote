@@ -121,7 +121,7 @@ body{
         animation-name: imageShadow;
         animation-duration: 4s;
         animation-iteration-count: infinite;
-        width: 35rem; 
+        width: 20rem; 
         height: auto;
       }
   }
@@ -139,7 +139,7 @@ body{
         animation-name: imageShadow;
         animation-duration: 4s;
         animation-iteration-count: infinite;
-        width: 50rem; 
+        width: 30rem; 
         height: auto;
       }
   }

@@ -1,22 +1,108 @@
-.grid-container > .grid-item:last-child {
-    grid-column: span 2; /* Make the last item span both columns */
-    justify-self: center; /* Center it horizontally */
-  }
+/* Grid Container */
+.grid-container {
+  /* background-color: rgb(255, 255, 255); */
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 16px;
+  height: 50vh;
+  justify-content: center;
+  margin: 1rem;
+  flex: 1;
+}
 
-  #parent{
-    background-color: rgb(0, 255, 0); display: grid;grid-template-columns: repeat(2, 1fr); gap: 16px; height:50vh;justify-content: center; flex:1; margin:1rem; 
-  }
+/* Modal Window */
+.modalWindowBox {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: -1000px; /* Start above the viewport */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%);
+  width: 75vw;
+  height: fit-content;
+  background-color: #2a2b2c;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  transition: top 0.5s ease-in-out; /* Smooth transition for the sliding effect */
+}
 
-  /* MOBILE */
+.modalWindowBox.active {
+  top: 50%; /* Move to the vertical middle of the viewport */
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.blur{
+  opacity: 0.5;
+}
+
+.modalWindowTitle {
+  flex: 1;
+  margin-top:10px;
+}
+
+.input-wrapper {
+  flex: 2;
+  position: relative;
+  margin: 10px;
+}
+
+input {
+  background:rgba(255, 255, 255, 0.479);
+  border-bottom: 2px solid gray;
+  border-radius: 6px;
+  width: 200px;
+  margin-top: 20px;
+  padding: 5px;
+  color:rgb(255, 255, 255);
+}
+
+label {
+  font-size: 1.25rem;
+  margin-right: 2rem;
+}
+
+/* Main Content */
+.main-container {
+  background-color: rgb(125, 156, 180);  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  padding: 1rem;
+}
+
+.question-div {
+  display: flex;
+  height: 25vh;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.answerBtn{
+  width: 90vw;
+}
+
+.answerBtn:hover{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;;
+  background:rgba(235, 210, 255, 0.74);
+}
+
+/* Mobile Styles */
 @media only screen and (max-width: 600px) {
-    
-  #parent{
-    background-color: rgb(0, 255, 0); 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex:1; 
-    margin:1rem; 
+  .grid-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 1rem;
   }
-    
+
+  label {
+    font-size: 1rem;
+  }
+  .answerBtn{
+    width: 100%;
+  }
 }

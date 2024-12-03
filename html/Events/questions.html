@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="/style/questions.css">
     </head>
     
-    <body>
+    <body">
       <!-- BAR DE NAVIGATION -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
@@ -47,15 +47,11 @@
         <a href="liste-event.html" class="previous round">&#8249;</a>
         
 
-
-
-
-
-
       <!-- CONTENU DE LA PAGE -->
         <div>
           <h2 id="event-titre">  </h2> 
           <button id="createQuestions"style="display:none;"> Voulez-vous rajoutez des questions? </button>
+             
         </div>
         
         
@@ -78,11 +74,12 @@
               <div id="question-button-template" style="display: none;" >    
                 
                 <!-- DIV DE CHAQUE QUESTION : TEXTE UPDATÉ À L'AIDE DU JS -->
-                <div class="question-div">
-                  <div class="dot"></div>
+                <div class="question-div" status="">
+                  
                   <div id="question-text-div" question-id="..." class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >
-                    <p id="question-text" style="display: inline-block;">...</p>
-
+                    <p id="question-text">...</p>
+                  </div>
+                  <div class="actionBtns" >
                     <!-- ACTION BUTTONS  -->
                     <button style="display: inline-block; float: right; margin:0 0 0 10px;" class="questionActionBtns btnPlayStopQuestion Stop" disabled>
                       <i class="bi bi-stop-fill" style="font-size: 1rem;"></i> <!--Stop button-->
@@ -91,18 +88,17 @@
                       <i class="bi bi-play-fill" style="font-size: 1rem;"></i> <!--Play button-->
                     </button>
                     <button style="display: inline-block; float: right; margin:0 0 0 10px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="questionActionBtns btnEditDelete btnDelete">
-                      DELETE
+                      <i class="bi bi-trash3-fill"></i>
                     </button><!--Delete button-->
-                    <button style="display: inline-block; float: right; margin:0 0 0 10px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="questionActionBtns btnEditDelete btnEdit">
-                      EDIT
-                    </button><!--Edit button-->
-                    
+                    <!-- <button style="display: inline-block; float: right; margin:0 0 0 10px;"  class="questionActionBtns btnEditDelete btnEdit" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                      <i class="bi bi-pencil-fill"></i>
+                    </button>      -->
+                    <button style="display: inline-block; float: right; margin:0 0 0 10px;"   id="toggleButton"><i class="bi bi-pencil-fill"></i></button>
                   </div>
-                  
                 </div>
                 
                 <!-- MODAL DELETE -->
-                <div class="modal fade deleteMod " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade deleteMod " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -124,47 +120,35 @@
                 <div class="alert alert-success" role="alert" id="customAlert" style="display: none;">
                   A simple success alert—check it out!
                 </div>
-                <!-- MODAL EDIT -->
-                <div class="modal fade editMod modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Supprimer une question</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="row mb-3">
-                          <label for="nouvelleQuestion" class="col-sm-2 col-form-label">Nouvelle question : </label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nouvelleQuestion" required>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label for="nouvelleReponse" class="col-sm-2 col-form-label">Nouvelles réponses : </label>
-                          <div class="col-sm-10">
-                            <input type="text" placeholder="Réponse 1 // Réponse 2 // Réponse 3"class="form-control" id="nouvelleReponse" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="soumettreEdit" data-bs-dismiss="modal">Soumettre</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
+                
                 <!-- SECTION QUI COLLAPSE -->
                 <div class="collapse" id="collapseExample">
                     <!-- DIV DES REPONSES POSSIBLES : VALEURS UPDATÉ À L'AIDE DU JS -->
                     <div class="card card-body" id="reponsesPossibles"></div>
-                  </div>
+                </div>
+                <div id="offcanvasEdit">
+                  <button class="btnInvisible"  id="closeButton">× Close</button>
+                  <h2>Modifier la question</h2>
+                  <p><i id="oldquestion"></i></p>
+                  <label for ="newQuestion">Nouvelle question: </label>
+                  <input id="newQuestion">
+                  <label for = "newAnswer">Nouvelle reponses : </label>
+                  <input id="newAnswer">
+                  <button class="btnInvisible" type="submit" id="submitBtn">Send</button>
+                </div>
               </div>
+
+              
             </div>
 
+
           </section>
+          
+
         </section>
-    
+        <h1 id="h">Temporary Value</h1>
+        
+        
       <!-- JAVASCRIPT -->
         <!-- BOOTSTRAP -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

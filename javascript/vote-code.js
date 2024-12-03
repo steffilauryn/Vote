@@ -80,11 +80,10 @@ function newVoter(voterIPadr,inputCourriel,eventId, clientId){
     })
     .then((data)=>{
         console.log("New voter successfully added");
-
-        setTimeout(function() {
-            document.getElementById('spinner').display='block';
+        document.querySelector('.spinner').classList.remove('disappear');
+        setTimeout(function() {  
             window.location.href = `voteur-event.html?client_id=${clientId}&event_id=${eventId}&vid=${data.id}`;
-        },5000);
+        },3000);
     })
     .catch((error) => {
         console.error('Error with edit request:', error);

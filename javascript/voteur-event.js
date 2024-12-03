@@ -5,7 +5,7 @@ function getQueryParam (name){
 
 const clientId = getQueryParam ('client_id');
 const eventId = getQueryParam ('event_id');
-const voterId = getQueryParam ('voter_id');
+const voterId = getQueryParam ('vid');
 const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`;
 
 console.log(apiUrl);
@@ -30,7 +30,7 @@ fetch(apiUrl)
                  clientLogoElement.src = clientLogoURL;
              }
         }
-
+        
         if(data.statut==="En direct"){
             document.getElementById("enterEventSpace").classList.remove('disabled');
             document.getElementById("messagePatienter").style.display='none';

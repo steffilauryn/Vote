@@ -2,12 +2,19 @@ const API_ENDPOINTS = {
     apiURLGetQuestionsPerEvent: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
     apiURLGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`,
     apiURLDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,
-    apiURLPatchQuestion: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`,
+    apiURLPatchQuestion: (question_id) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${question_id}`,
     apiURLGetQuestionStatus: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`,
-    apiURLPatchQuestionStatus : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editQuestionStatus/${questionId}`
+    apiURLPatchQuestionStatus : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editQuestionStatus/${questionId}`,
+    apiURLPatchEventStatus : (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editEventStatus/${eventId}`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
+
+
+
+
+
+
 
 
 // FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
@@ -68,7 +75,7 @@ fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
          }
     }
 
-    titlePage(data.nbrQuestions, data.listOfQuestions, data.statut);
+    titlePage(data.nbrQuestions, data.listOfQuestions, data.id);
 })
 .catch(error=>{
     console.error('Error fetching questions: ', error);
@@ -85,40 +92,19 @@ function renderQuestions(data)
     questionsDiv.innerHTML = '';
 
     data.forEach((item, index) => {
+        console.log('item', item, ' item status', item.launch_status);
         const itemButton = document.getElementById('question-button-template');
         const itemClone = itemButton.cloneNode(true);  
-
     //CONSTANTES
         const uniqueId = (index + 1); 
         const questionId = item.id;
 
-    // QUERY SELECTORS
-        //1. questionValeur : <div> où la question s'affichera.  
-        //2. questionValeurText : <p> où la question s'affichera. Valeur est pris directement de xano
-        //4. btnCollapse : <div> de type button qui gère la fonction collapse
-        //5. collapseDiv : section qui collapse où on retrouve les réponses possibles
-        //6. questionEditBtn : le <button> qui edit les questions
-        //7. modalEdit : <div> modal qui ouvre quand le bouton questionEditBtn est appuyé
-        //8. questionDeleteBtn : le <button> qui delete les questions
-        //9. modalDelete : <div> modal qui ouvre quand le bouton questionDeleteBtn est appuyé
-        //10. newAnswerInputField : This is the input field where the new answers dans le format a / b / c ... 
-        //11. oldAnswer : this is the answer currently found in xano (before any edits are made)
-        //12. btnConfirmEdit : this is the submit button in the modalEdit window
-        //13. reponsesString : les reponses tels que retrouvé dans xano
-        //14. reponsesValeurDiv : this is the div where the answers go
-
         const questionValeurDiv = itemClone.querySelector('#question-text-div');
         const questionValeur = itemClone.querySelector('#question-text');
-
         const buttonCollapse = itemClone.querySelector('.btn');
         const collapseDiv = itemClone.querySelector('.collapse');
-        const questionEditBtn = itemClone.querySelector('.btnEdit');
-        const modalEdit = itemClone.querySelector('.modal.fade.editMod.modal-lg');
         const questionDeleteBtn = itemClone.querySelector('.btnDelete');
         const modalDelete = itemClone.querySelector('.modal.fade.deleteMod');
-        const newAnswerInputField = itemClone.querySelector('#nouvelleReponse');
-        const oldAnswer = item.Reponses;
-        const btnConfirmEdit = itemClone.querySelector('#soumettreEdit');
         const btnConfirmDelete = itemClone.querySelector('#soumettreDelete');
         const reponsesValeurDiv = itemClone.querySelector('#reponsesPossibles')
         const reponsesString = item.Reponses;
@@ -127,21 +113,22 @@ function renderQuestions(data)
         const questionSupprimer = itemClone.querySelector('#questionInModal');
         const btnLaunchQuestion = itemClone.querySelector('.Play');
         const btnEndLaunchQuestion = itemClone.querySelector('.Stop');
-        const dot = itemClone.querySelector('.dot');
-    //SET ATTRIBUTES 
+        
+       // console.log(itemClone.querySelector('#offcanvas-body-div').innerText);
+
+        //SET ATTRIBUTES 
         questionValeurDiv.setAttribute('question-id', questionId);
         buttonCollapse.setAttribute('aria-controls', `collapse${uniqueId}`);  //ex: aria-controls="collapse1"
         buttonCollapse.setAttribute('data-bs-target', `#collapse${uniqueId}`);  //ex: data-bs-target="#collapse1"
         collapseDiv.setAttribute('id', `collapse${uniqueId}`); //ex: id = "collapse1"
-        questionEditBtn.setAttribute('data-bs-target', `#editQuestion${uniqueId}`); //ex: data-bs-target= "#editQuestion1"
         questionDeleteBtn.setAttribute('data-bs-target', `#deleteQuestion${uniqueId}`); //ex: data-bs-target= "#deleteQuestion1"
-        modalEdit.setAttribute('id', `editQuestion${uniqueId}`); //ex: id = "editQuestion1"
+        
         modalDelete.setAttribute('id', `deleteQuestion${uniqueId}`);  //ex: id = "deleteQuestion1"
-        newAnswerInputField.setAttribute('value',oldAnswer); //put the old answer in the answer input field (in case we want to keep the old answers)
-    
-    //INNERTEXT & TEXTCONTENT
+        questionValeurDiv.setAttribute('status', item.launch_status);
+        //INNERTEXT & TEXTCONTENT
         questionValeur.innerText = item.question_valeur; //DISPLAY QUESTION INSIDE EACH QUESTION BUTTON
         questionSupprimer.textContent = item.question_valeur; //DISPLAY QUESTION IN DELETE MODAL WINDOW
+
 
     //DISPLAY ANSWERS 
         reponsesValeurDiv.replaceChildren();
@@ -156,29 +143,27 @@ function renderQuestions(data)
         }
         reponsesValeurDiv.appendChild(newListUl);
     
+    const editBtn = itemClone.querySelector('#toggleButton');
     //ONCLICK
         // DELETE QUESTION
         btnConfirmDelete.setAttribute(
             'onclick',
             `deleteQuestion('${questionId}', this.closest('.question-div'))`
         );
-        
-        // EDIT QUESTION;
-        btnConfirmEdit.setAttribute(
+
+        editBtn.setAttribute(
             'onclick',
-            `editQuestion('${questionId}','${eventId}')`
+            `openOffCanvas("${questionValeur.innerHTML}", this.closest('#question-button-template'))`
         );
         
         btnLaunchQuestion.addEventListener('click', () => {
             launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
             editQuestionStatus(questionId,'Live');
-            dot.style.backgroundColor='red';
         });
 
         btnEndLaunchQuestion.addEventListener('click', () => {
             endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
             editQuestionStatus(questionId,'Launched');
-            dot.style.backgroundColor='black';
         });
 
         itemClone.style.display = 'block';
@@ -190,7 +175,6 @@ function launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion){
     if (btnLaunchQuestion && btnEndLaunchQuestion) {
         btnLaunchQuestion.disabled = true;
         btnEndLaunchQuestion.disabled = false;
-        document.querySelector('.dot').style="background-color:red;"
 
     } else {
         console.error("One or both buttons are not valid elements.");
@@ -251,44 +235,6 @@ function deleteQuestion(qid, questionDiv) {
 }
 
 // PATCH
-function editQuestion(qid, eventId) {
-    const modal = document.querySelector('.modal.fade.editMod.modal-lg'); // Get the currently open modal
-    const newQuestionValue = modal.querySelector('#nouvelleQuestion').value; // Input for the updated question
-    const newAnswerValue = modal.querySelector('#nouvelleReponse').value; // Input for the updated answers
-    const submitButton = modal.querySelector('#soumettreEdit');
-    const alertPop = document.querySelector('.alert.alert-success');
-    const patchData = {
-        question_id: qid,
-        question_valeur: newQuestionValue,
-        event_id: eventId,
-        Reponses: newAnswerValue
-    };
-
-    console.log("Patch data being sent:", patchData);
-
-    fetch(API_ENDPOINTS.apiURLPatchQuestion(qid), {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(patchData),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(() => {
-        console.log(`Edited question ID ${qid} with values:`, patchData);
-        alert("Votre question a été changé avec succès");
-        refreshQuestions();
-    })
-    .catch((error) => {
-        console.error('Error with edit request:', error);
-    });
-}
-
 function editQuestionStatus(qid,status) {
     const patchData = {
         question_id: qid,
@@ -316,6 +262,13 @@ function editQuestionStatus(qid,status) {
             setTimeout(function(){
                 alert(`La question ${qid} est live`);
             },1000);
+            document.querySelector('#question-text-div').style.backgroundColor='red';
+        }
+        if(status==='Launched'){
+            setTimeout(function(){
+                alert(`La question ${qid} n'est plus live`);
+            },1000);
+            document.querySelector('#question-text-div').style.backgroundColor='grey';
         }
     })
     .catch((error) => {
@@ -335,6 +288,12 @@ function refreshQuestions() {
             console.log("Questions being refreshed");
             console.log("Fetched data: ", data); 
             renderQuestions(data);
+            if(data.launch_status==='Live'){
+                document.querySelector('.question-text-div').style.backgroundColor = 'red';
+            }
+            else if(data.launch_status==='Launched'){
+                document.querySelector('.question-text-div').style.backgroundColor = 'grey';
+            }
             console.log("Questions successfully refreshed");
         })
         .catch(error => {
@@ -351,16 +310,45 @@ function showAlert() {
         alertBox.style.display = "none";
     }, 3000);
 }
+function editEventStatus(eid,status) {
+    const patchData = {
+        eventStatus: status,
+        event_id : eid
+    };
 
-function toggleClass(element, className, shouldAdd) {
-    if (shouldAdd) {
-        element.classList.add(className);
-    } else {
-        element.classList.remove(className);
-    }
+    console.log("Patch data being sent:", patchData);
+
+    fetch(API_ENDPOINTS.apiURLPatchEventStatus(eid), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patchData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(() => {
+        console.log(`Change event status to ${status}`);
+        if(status==='Live'){
+            setTimeout(function(){
+                alert(`L'événement a commencé`);
+            },1000);
+        }
+        if(status==='Launched'){
+            setTimeout(function(){
+                alert(`L'événement est terminé`);
+            },1000);
+        }
+    })
+    .catch((error) => {
+        console.error('Error with edit request:', error);
+    });
 }
-
-function titlePage(nbrQuestions, list, statutEvent){
+function titlePage(nbrQuestions, list,eid){
     // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL)
     // AFFICHER LE TITRE ET MODIFIER LE STYLE 
     // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
@@ -371,10 +359,10 @@ function titlePage(nbrQuestions, list, statutEvent){
                                         ${eventName} 
                                         <div style="width: 100vw;">
                                             <div style="display: flex; justify-content: center; align-items: center;">
-                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)"id="startBtn" class="btnPlayStop">
+                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)"id="startBtn" class="btnPlayStop ">
                                                     <i class ="bi bi-play-fill playEvent">START LIVE</i>
                                                 </button>
-                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)" id="stopBtn" class="btnPlayStop">
+                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)" id="stopBtn" class="btnPlayStop disabled">
                                                     <i class="bi bi-stop-fill stopEvent" id="stopEvent">STOP LIVE</i>
                                                 </button>
                                             </div>
@@ -383,20 +371,67 @@ function titlePage(nbrQuestions, list, statutEvent){
         eventInfoElement.style = `text-align:center; font-size:5rem`;
         eventInfoElement.innerText= `Aucune question assigné.`;
     }
+    const start = document.getElementById('startBtn');
+    const stop = document.getElementById('stopBtn');
 
-    if(statutEvent == STATUT_EVENT[0]){
-        toggleClass(stopBtn, 'disabled', true);
-        console.log("successfully disabled stop");
-    }
-    else if(statutEvent == STATUT_EVENT[1]){
-        toggleClass(stopBtn, 'disabled', false);
-        toggleClass(startBtn, 'disabled', true);
-        console.log("successfully disabled start and enabled stop");
-    }
-    else{
-        toggleClass(startBtn, 'disabled', true);
-        toggleClass(stopBtn, 'disabled', true);
-        console.log("successfully disabled both");
-    }
-   
+    start.addEventListener('click', () => {
+        stop.classList.remove('disabled');
+        start.classList.add('disabled');
+        editEventStatus(eid, 'En direct');
+    });
+
+    stop.addEventListener('click', () => {
+        stop.classList.add('disabled');
+        start.classList.remove('disabled');
+        editEventStatus(eid, 'Archivé');
+    });
+}
+
+function openOffCanvas(questionOG, item){
+    document.getElementById('offcanvasEdit').classList.add('open');
+    document.getElementById('oldquestion').innerText = questionOG;
+    const submit = item.querySelector('#submitBtn');
+    submit.setAttribute(
+        'onclick',
+        `editQuestion(this.closest('#question-button-template'))`
+    );
+    console.log(item.innerHTML);
+}
+
+function editQuestion(item){
+    // console.log('in editQuestion: ',item.innerHTML);
+    const newQ = item.querySelector('#newQuestion').value;
+    const newA = item.querySelector('#newAnswer').value;
+    const qidElem = item.querySelector('#question-text-div');
+    const qid = qidElem.getAttribute('question-id');
+    // console.log(qid.getAttribute('question-id'));
+    const patchData = {
+        question_id: qid,
+        question_valeur : newQ,
+        event_id : eventId,
+        Reponses : newA
+    };
+
+    console.log("Patch data being sent:", patchData);
+
+    fetch(API_ENDPOINTS.apiURLPatchQuestion(qid), {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patchData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(() => {
+        console.log('questions have been edited');
+        refreshQuestions();
+    })
+    .catch((error) => {
+        console.error('Error with edit request:', error);
+    });
 }

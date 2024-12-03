@@ -1,8 +1,13 @@
+*{
+    aria-hidden:none !important;
+}
 body{
     background-color: whitesmoke;
 }
 .dot{
-    position:absolute;   
+    display:flex;
+    flex-direction: row;
+    position:relative;   
     height: 25px;
     width: 25px;
     background-color: #bbb;
@@ -49,17 +54,18 @@ body{
 }
 #question-button-template{
     width: 100%;
-    place-self: center;
-    text-align: center;
     margin-bottom: 1rem;
     border:none;
 }
 
 #question-text-div{
+    display: flex;
     width: 100%;
-    background-color: #bdfcc1;
+    background-color: white;
     border-color: #EDFBEE;
     color:black;
+    text-align: left; /* Ensures text is left-aligned */
+    margin: 0;
 }
 
 .question-actions{
@@ -132,12 +138,7 @@ section {
     border-radius: 50%;        /* Make it circular */
     margin-right: 5px;  
 }
-.pageHeader {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+
 #createQuestions
 {
     width: fit-content;
@@ -185,27 +186,62 @@ section {
 .Play{
     background-color: rgb(47, 134, 47);
 }
+
+.question-div{
+    display : flex;
+}
+
+.actionBtns{
+    display: inline-flex;
+}
+
+
+#offcanvasEdit {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #333;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    }
+    
+    #offcanvasEdit.open {
+    left: 0;
+    }
+
+    #closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    }
+
+
 /* MOBILE */
+
 @media only screen and (max-width: 426px) {
     .previous{
         position: relative;
     }
-    #event-info {
-        display: block;
-        position:relative;
-    }
-    #question-button-template{
-       display: inline-flex;
-       width: 100%;
-       justify-self: center; /* Horizontal alignment */
-       align-self: center;   /* Vertical alignment */
+
+    .question-div{
+       display: flex;
+       flex-direction: column;
     }
 
     #event-information{
         display: none;
     }
-
-    
+    .actionBtns{
+        display: flex;
+        justify-content: center;
+    }
+    .dot{
+        display: none;
+    }
 }
 
 /* laptops and higher */
@@ -215,7 +251,7 @@ section {
     }
 
     #event-information {
-        flex: 0 0 30%; /* Fixed width: 20% of the container */
+        flex: 0 0 30%; /* Fixed width: 30% of the container */
         max-width: 30%; /* Prevent overflow */
         max-height: max-content;
         background-color: #f9f9f9; /* Optional: Background color */
