@@ -13,6 +13,7 @@ app.get('/:page', (req, res) => {
     console.log(`Requested page: ${page}`);
     console.log('Query parameters:', query);
     const filePath = path.join(__dirname, 'views', `${page}.html`);
+    
     res.sendFile(filePath, (err) => {
         if (err) {
             console.error(err); // Log the error

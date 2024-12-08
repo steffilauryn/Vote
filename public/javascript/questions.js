@@ -18,14 +18,14 @@ const API_ENDPOINTS = {
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
 
 // FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
-function getQueryParam (name){
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
+// function getQueryParam (name){
+//     const urlParams = new URLSearchParams(window.location.search);
+//     return urlParams.get(name);
+// }
 
 // CONSTANTES FROM URL
-const eventId = getQueryParam('event_id'); //eventId from url
-const eventName = getQueryParam('event_titre'); //event title from url
+const eventId = params.get('event_id'); //eventId from url
+const eventName = params.get('event_titre'); //event title from url
 
 // this is the div holding the title and the start live and end live buttons
 const eventInfoElement = document.getElementById('event-titre');
