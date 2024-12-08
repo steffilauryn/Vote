@@ -22,7 +22,7 @@ const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
 //     const urlParams = new URLSearchParams(window.location.search);
 //     return urlParams.get(name);
 // }
-
+const params = new URLSearchParams(window.location.search);
 // CONSTANTES FROM URL
 const eventId = params.get('event_id'); //eventId from url
 const eventName = params.get('event_titre'); //event title from url
