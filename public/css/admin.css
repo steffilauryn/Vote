@@ -19,7 +19,7 @@ html,body {
 	width: 350px;
 	position: relative;
 	overflow: hidden;
-	background-image: url('/assets/Dark\ Green\ Modern\ Initial\ Logo\ \(1\).png');
+	background-image: url('/public/images/Dark\ Green\ Modern\ Initial\ Logo\ \(1\).png');
     background-size: cover;
     background-position: center;
 	.signup {
