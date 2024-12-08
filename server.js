@@ -33,7 +33,7 @@ app.get('/create', (req, res) => {
 
 // Route for liste-event.html in views folder
 app.get('/liste-event', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views/liste-event.html'));
+    res.sendFile(path.join(__dirname, 'views/liste-event'));
 });
 
 // Route for questions.html in views folder
