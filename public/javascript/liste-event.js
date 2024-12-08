@@ -49,7 +49,7 @@ fetch(apiURLEvent)
         else{
               const clientLogoElement = eventCardClone.querySelector('#eventCardImg');
               if (clientLogoElement) {
-                  clientLogoElement.src = "/public/images/aucuneImage.png";
+                  clientLogoElement.src = "/images/aucuneImage.png";
                   clientLogoElement.alt = "Aucune client assigné."; // Optional: Add alt text for accessibility
               }
         }

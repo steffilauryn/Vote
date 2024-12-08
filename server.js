@@ -9,7 +9,10 @@ app.use(express.static('public'));
 // Dynamic route to serve any HTML file from 'views'
 app.get('/:page', (req, res) => {
     const page = req.params.page;
-    const filePath = path.join(__dirname, 'views', `${page}.html`);
+    const query = req.query;
+    console.log(`Requested page: ${page}`);
+    console.log('Query parameters:', query);
+    const filePath = path.join(__dirname, 'views', `${page}`);
     res.sendFile(filePath, (err) => {
         if (err) {
             console.error(err); // Log the error
