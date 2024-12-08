@@ -92,6 +92,8 @@ fetch(API_ENDPOINTS.apiURLGetQuestionDetails(questionId))
 
     submitClicked.addEventListener('click', () => {
         //send qid, send answer chosen, send voterid, send eventid
+        submitClicked.disabled = true;
+        alert('votre reponse a bel et bien été enregistré. veuillez patienter');
         refreshStatus(questionId, document.getElementById('answer').value, voterId, data.event_id);  
     });
     
@@ -163,7 +165,7 @@ function submitAnswer(questionId, answer, voterId,event_id){
 }
 
 function postVoteurEvent(arr){
-    // arr = [questionId, answer, voterId,event_id]
+   
     const patchData = {
         voteurs_id: arr[2],
         question_id: arr[0],

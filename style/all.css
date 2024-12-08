@@ -1,0 +1,31 @@
+:root {
+    --bodyBackgroundColor: aliceblue;
+    --white: #ffffff;
+    --black: #000000;
+    --logoGreen : #07363c;
+    --logoBeige : #dcbe98;
+    --buttonGreen : #56685f;
+    --buttonLightGreen : #6db691;
+    --collapse : #abebcb2c;
+    --stopRed : red;
+    --stopLightRed : rgb(255, 119, 119);
+    --lightGrey :#c4c4c4;
+}
+
+body, nav{
+    background-color: var(--bodyBackgroundColor);
+    overflow-x: hidden;
+}
+
+nav{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.nav-item{
+    padding: 10px 0;
+}
+
+.navImg {
+    border-radius:50%;
+    
+}

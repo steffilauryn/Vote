@@ -1,21 +1,21 @@
 const API_ENDPOINTS = {
     apiURLGetQuestionsPerEvent: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
-    apiURLGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`,
-    apiURLDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,
-    apiURLPatchQuestion: (question_id) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${question_id}`,
+
+    apiURLGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`, //USED FOR TITLE AND EVENT DETAILS BOX BELOW
+
+    apiURLDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,  //USED 
+
+    apiURLPatchQuestion: (question_id) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${question_id}`,//USED
+
+    
     apiURLGetQuestionStatus: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`,
-    apiURLPatchQuestionStatus : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editQuestionStatus/${questionId}`,
-    apiURLPatchEventStatus : (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editEventStatus/${eventId}`
+
+    apiURLPatchStatus : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editStatus`,
+
+    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
-
-
-
-
-
-
-
 
 // FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
 function getQueryParam (name){
@@ -32,7 +32,7 @@ const eventInfoElement = document.getElementById('event-titre');
 
 //this is the main div encompassing all the questions
 const questionsDiv = document.getElementById('questions'); 
-
+const tableQA = document.getElementById('tableResults');
 refreshQuestions();
 
 // GET EVENT DETAILS. LEFT SIDEBAR . 
@@ -45,42 +45,11 @@ fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
 })
 .then (data=>{
     console.log(data);
-    const section = document.getElementById('event-information');
-    section.querySelector('#eventDescription').textContent=data.description;
-    const timestampStart = data.date_heure_debut;
-    const timestampEnd = data.date_heure_fin;
-
-    const dateStart = new Date(timestampStart);
-    const dateEnd = new Date(timestampEnd);
-    const options = {
-        year: 'numeric',    // Full numeric year
-        month: 'long',      // Full month name (e.g., "novembre")
-        day: 'numeric',     // Day of the month
-        hour: '2-digit',    // Two-digit hour
-        minute: '2-digit',  // Two-digit minute
-    };
-
-    const formattedStart = new Intl.DateTimeFormat('fr-CA', options).format(dateStart);
-    const formattedEnd = new Intl.DateTimeFormat('fr-CA', options).format(dateEnd);
-
-    section.querySelector('#eventDate').innerHTML = `Début: ${formattedStart} <br> Fin: ${formattedEnd}`;
-
-    if(data.client){
-        const clientLogoURL = data.client.logo.url;
-        
-         // Set client logo
-         const clientLogoElement = section.querySelector('#eventImg');
-         if (clientLogoElement) {
-             clientLogoElement.src = clientLogoURL;
-         }
-    }
-
-    titlePage(data.nbrQuestions, data.listOfQuestions, data.id);
+    eventDetails(data);
 })
 .catch(error=>{
     console.error('Error fetching questions: ', error);
 });
-
 
 // FONCTIONS 
 // 1. launchQuestion(qid) : Appelé quand le bouton launch de la question est appuyé.  
@@ -88,17 +57,26 @@ fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
 
 function renderQuestions(data)
 {
+    //console.log(data.length); = 5
     console.log("renderQuestions function data: ", data);  //data = list of questions
     questionsDiv.innerHTML = '';
-
+    tableQA.innerHTML=`<tr>
+                  <td>Question</td>
+                  <td>Nombre de voteurs</td>
+                  <td>Vote majoritaire</td>
+                  <td>Repartition des votes</td>
+              </tr>`;
     data.forEach((item, index) => {
         console.log('item', item, ' item status', item.launch_status);
         const itemButton = document.getElementById('question-button-template');
-        const itemClone = itemButton.cloneNode(true);  
+        const itemClone = itemButton.cloneNode(true); 
+        const itemTableRow = document.getElementById('table-row-template'); 
+        console.log(document.getElementById('table-row-template'))
+
+        const itemTableClone = itemTableRow.cloneNode(true);
     //CONSTANTES
         const uniqueId = (index + 1); 
         const questionId = item.id;
-
         const questionValeurDiv = itemClone.querySelector('#question-text-div');
         const questionValeur = itemClone.querySelector('#question-text');
         const buttonCollapse = itemClone.querySelector('.btn');
@@ -115,7 +93,6 @@ function renderQuestions(data)
         const btnEndLaunchQuestion = itemClone.querySelector('.Stop');
         
        // console.log(itemClone.querySelector('#offcanvas-body-div').innerText);
-
         //SET ATTRIBUTES 
         questionValeurDiv.setAttribute('question-id', questionId);
         buttonCollapse.setAttribute('aria-controls', `collapse${uniqueId}`);  //ex: aria-controls="collapse1"
@@ -128,7 +105,19 @@ function renderQuestions(data)
         //INNERTEXT & TEXTCONTENT
         questionValeur.innerText = item.question_valeur; //DISPLAY QUESTION INSIDE EACH QUESTION BUTTON
         questionSupprimer.textContent = item.question_valeur; //DISPLAY QUESTION IN DELETE MODAL WINDOW
-
+        if (questionValeurDiv) {
+            console.log('questionValeurDiv exists');
+            if (item.launch_status === 'Live') {
+                questionValeurDiv.style.backgroundColor = 'var(--stopLightRed)';
+            } else if (item.launch_status === 'Launched') {
+                questionValeurDiv.style.backgroundColor = 'grey';
+            } else {
+                questionValeurDiv.style.backgroundColor = 'white';
+            }
+        } else {
+            console.error('No #question-text-div found in the cloned element!');
+        }
+        
 
     //DISPLAY ANSWERS 
         reponsesValeurDiv.replaceChildren();
@@ -143,8 +132,21 @@ function renderQuestions(data)
         }
         reponsesValeurDiv.appendChild(newListUl);
     
-    const editBtn = itemClone.querySelector('#toggleButton');
 
+    //Table Rows
+        const questionTD1 = itemTableClone.querySelector('.question-valeur');
+        questionTD1.innerText = item.question_valeur;
+        
+        const questionTD2 = itemTableClone.querySelector('.nombre-voteurs');
+        const questionTD3 = itemTableClone.querySelector('.reponseMaj');
+        const questionTD4 = itemTableClone.querySelector('.allVotes');
+        // questionTD4.innerText = "A / B / C";
+        tableResults(item.id, answerListItems,questionTD2, questionTD3,questionTD4);
+        itemTableClone.style.display = 'table-row';
+        tableQA.appendChild(itemTableClone);
+
+
+    const editBtn = itemClone.querySelector('#toggleButton');
     itemClone.querySelector('.offcanvasEdit').setAttribute('id',`offcanvasEdit${uniqueId}`);
     //ONCLICK
         // DELETE QUESTION
@@ -153,29 +155,125 @@ function renderQuestions(data)
             `deleteQuestion('${questionId}', this.closest('.question-div'))`
         );
 
-        // editBtn.setAttribute(
-        //     'onclick',
-        //     `openOffCanvas("${questionValeur.innerHTML}", this.closest('#question-button-template'))`
-        // );
         editBtn.setAttribute(
             'onclick',
             `openOffCanvas("${questionValeur.innerHTML}", "offcanvasEdit${uniqueId}", this.closest('#question-button-template'))`
         );
         
-        
         btnLaunchQuestion.addEventListener('click', () => {
             launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
-            editQuestionStatus(questionId,'Live');
+            //editQuestionStatus(questionId,'Live');
+            editStatus(null, questionId, null, 'Live', questionValeurDiv);
+            //TestDrive(questionValeurDiv);
         });
 
         btnEndLaunchQuestion.addEventListener('click', () => {
             endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
-            editQuestionStatus(questionId,'Launched');
+            //editQuestionStatus(questionId,'Launched');
+            editStatus(null, questionId, null, 'Launched', questionValeurDiv);
+            //TestDrive(questionValeurDiv);
         });
 
         itemClone.style.display = 'block';
         questionsDiv.appendChild(itemClone);
     });
+
+}
+function TestDrive(a){
+    console.log(a);
+    console.log(a.innerHTML);
+}
+
+function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD4){
+    fetch(API_ENDPOINTS.apiURLGetQuestionVoters(questionId))
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+           console.log('tableresullts data:', data);
+           console.log('questionid : ',questionId);
+
+           const nbrDeVoteurs = data.length;
+           let arrayGivenAnswers = [];
+           data.forEach(question => {
+            arrayGivenAnswers.push(question.reponse);
+           })
+           console.log('arrayGivenAnswers : ',arrayGivenAnswers); //array of user given answers 
+
+
+           const obj={nombre_de_voteurs:nbrDeVoteurs};
+           answerList.forEach(item=>{
+                obj[item] = 0; 
+           });
+          
+           //The obj list we start with; key value pairs of answer:number of votes
+           console.log('obj : ',obj); 
+
+           for(i=0; i<answerList.length;i++){
+                const occurences = arrayGivenAnswers.filter(function (answer){
+                    return answer === answerList[i];
+                }).length;
+                const occPourcentages = occurences / nbrDeVoteurs * 100;
+                obj[answerList[i]]=occPourcentages.toFixed(2);
+           }
+           console.log('obj after occurences added: ',obj); 
+
+           questionTD2.innerText=nbrDeVoteurs;
+           
+           objKeysArray = Object.getOwnPropertyNames(obj);
+           objKeysArray.shift();
+           console.log('objKeysArray',objKeysArray);
+            let maj = obj[objKeysArray[0]];
+            let majKey = objKeysArray[0];
+            let tiesTemp = [majKey];
+            console.log('tiesTemp before: ',tiesTemp)
+            for (let i = 1; i < objKeysArray.length; i++) {
+                    if(obj[objKeysArray[i]]>maj){
+                        maj = obj[objKeysArray[i]];
+                        majKey = objKeysArray[i];
+                        tiesTemp = [];
+                        console.log('If true -> maj = ',tiesTemp, ' / majKey = ', majKey, ' / tiesTemp =',tiesTemp)
+                    }
+                    else if(maj===obj[objKeysArray[i]]){
+                        tiesTemp.push(objKeysArray[i]);
+                    }
+                
+            }
+            if(nbrDeVoteurs===0){
+                majKey='n/a';
+                tiesTemp=[];
+            }
+            console.log ('is it equal to n/a' ,majKey);
+            console.log('tiesTemp after: ',tiesTemp);
+            
+            if (tiesTemp.length > 0){
+                console.log('majKey when tiesTemp is not empty: ',majKey);
+                questionTD3.innerHTML=tiesTemp.join('<br>');
+            }
+            else{
+                console.log('majKey when tiesTemp is empty: ',majKey);
+                questionTD3.innerText=majKey;
+                console.log(questionTD3.innerText);
+                console.log(questionTD3.innerHTML);
+            }
+
+            delete obj['nombre_de_voteurs'];
+            let sortedObject = Object.fromEntries(
+                Object.entries(obj).sort(([, a], [, b]) => a - b)
+            );
+            let txt = "";
+            for (let x in sortedObject) {
+                txt += x + ':' + sortedObject[x] + `<br>`;
+            }
+
+            questionTD4.innerHTML = txt;
+        })
+        .catch(error => {
+            console.error('Error fetching questions: ', error);
+        });
 }
 
 function launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion){
@@ -196,7 +294,6 @@ function endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion){
         console.error("One or both buttons are not valid elements.");
     }
 }
-
 // DELETE 
 function deleteQuestion(qid, questionDiv) {
 
@@ -241,48 +338,6 @@ function deleteQuestion(qid, questionDiv) {
             });
 }
 
-// PATCH
-function editQuestionStatus(qid,status) {
-    const patchData = {
-        question_id: qid,
-        launch_status : status
-    };
-
-    console.log("Patch data being sent:", patchData);
-
-    fetch(API_ENDPOINTS.apiURLPatchQuestionStatus(qid), {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(patchData),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(() => {
-        console.log(`Change question ${qid} status with ${status}`);
-        if(status==='Live'){
-            setTimeout(function(){
-                alert(`La question ${qid} est live`);
-            },1000);
-            document.querySelector('#question-text-div').style.backgroundColor='red';
-        }
-        if(status==='Launched'){
-            setTimeout(function(){
-                alert(`La question ${qid} n'est plus live`);
-            },1000);
-            document.querySelector('#question-text-div').style.backgroundColor='grey';
-        }
-    })
-    .catch((error) => {
-        console.error('Error with edit request:', error);
-    });
-}
-
 function refreshQuestions() {    
     fetch(API_ENDPOINTS.apiURLGetQuestionsPerEvent(eventId))
         .then(response => {
@@ -295,12 +350,6 @@ function refreshQuestions() {
             console.log("Questions being refreshed");
             console.log("Fetched data: ", data); 
             renderQuestions(data);
-            if(data.launch_status==='Live'){
-                document.querySelector('.question-text-div').style.backgroundColor = 'red';
-            }
-            else if(data.launch_status==='Launched'){
-                document.querySelector('.question-text-div').style.backgroundColor = 'grey';
-            }
             console.log("Questions successfully refreshed");
         })
         .catch(error => {
@@ -317,15 +366,17 @@ function showAlert() {
         alertBox.style.display = "none";
     }, 3000);
 }
-function editEventStatus(eid,status) {
-    const patchData = {
-        eventStatus: status,
-        event_id : eid
-    };
 
+function editStatus(eid, qid, eventStatus,questionStatus){
+    const patchData = {
+        statusEvent: eventStatus,
+        event_id: eid,
+        question_id: qid,
+        statusQuestion: questionStatus
+    };
     console.log("Patch data being sent:", patchData);
 
-    fetch(API_ENDPOINTS.apiURLPatchEventStatus(eid), {
+    fetch(API_ENDPOINTS.apiURLPatchStatus(), {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -339,31 +390,46 @@ function editEventStatus(eid,status) {
         return response.json();
     })
     .then(() => {
-        console.log(`Change event status to ${status}`);
-        if(status==='Live'){
-            setTimeout(function(){
-                alert(`L'événement a commencé`);
-            },1000);
+        if(eid===null && eventStatus===null){
+            console.log(`Change question ${qid} status with ${questionStatus}`);
+           
+            if(questionStatus==='Live'){
+                setTimeout(function(){
+                    alert(`La question ${qid} est live`);
+                },500);
+            }
+            if(questionStatus==='Launched'){
+                setTimeout(function(){
+                    alert(`La question ${qid} n'est plus live`);
+                },500);
+            }
         }
-        if(status==='Launched'){
-            setTimeout(function(){
-                alert(`L'événement est terminé`);
-            },1000);
+        else if(qid===null && questionStatus===null){
+            console.log(`Change event ${eid} status with ${eventStatus}`);
+            if(eventStatus==='En direct'){
+                setTimeout(function(){
+                    alert(`L'evenement est en direct`);
+                },1000);
+            }
+            if(eventStatus==='Archivé'){
+                setTimeout(function(){
+                    alert(`L'evenement n'est plus en direct`);
+                },1000);
+            }
         }
+        
     })
     .catch((error) => {
         console.error('Error with edit request:', error);
     });
 }
-function titlePage(nbrQuestions, list,eid){
-    // SI L'ÉVÉNEMENT N'A PAS DE QUESITON (AUCUN DES DEUX DONNÉES SONT NULL)
-    // AFFICHER LE TITRE ET MODIFIER LE STYLE 
-    // SINON AFFICHER MESSAGE QU'IL N'Y A PAS DE DONNÉES DISPONIBLES
-    // id de eventInfoElement : 'event-titre'
+
+function titlePage(nbrQuestions, list,eid,formattedStart,formattedEnd){
     if (nbrQuestions > 0 && list[0] !== "") {
         eventInfoElement.style = `text-align:center;`;
         eventInfoElement.innerHTML = `
-                                        ${eventName} 
+                                        <h1>${eventName}</h1> 
+                                        <p style="display: flex;justify-content: center;"id="eventDate"><b>Début: ${formattedStart} <br> Fin: ${formattedEnd}</b></p> 
                                         <div style="width: 100vw;">
                                             <div style="display: flex; justify-content: center; align-items: center;">
                                                 <button style="border:none; background-color:rgba(0, 0, 0, 0)"id="startBtn" class="btnPlayStop ">
@@ -380,30 +446,23 @@ function titlePage(nbrQuestions, list,eid){
     }
     const start = document.getElementById('startBtn');
     const stop = document.getElementById('stopBtn');
-
+    
     start.addEventListener('click', () => {
         stop.classList.remove('disabled');
         start.classList.add('disabled');
-        editEventStatus(eid, 'En direct');
+       // editEventStatus(eid, 'En direct');
+        editStatus(eid, null, 'En direct',null);
     });
 
     stop.addEventListener('click', () => {
         stop.classList.add('disabled');
         start.classList.remove('disabled');
-        editEventStatus(eid, 'Archivé');
+       // editEventStatus(eid, 'Archivé');
+        editStatus(eid, null, 'Archivé',null);
     });
-}
 
-// function openOffCanvas(questionOG, item){
-//     document.getElementById('offcanvasEdit').classList.add('open');
-//     document.getElementById('oldquestion').innerText = questionOG;
-//     const submit = item.querySelector('#submitBtn');
-//     submit.setAttribute(
-//         'onclick',
-//         `editQuestion(this.closest('#question-button-template'))`
-//     );
-//     console.log(item.innerHTML);
-// }
+    console.log(eventInfoElement.innerHTML);
+}
 
 function openOffCanvas(questionOG, offCanvasId, item) {
     // console.log(item.innerHTML);
@@ -462,4 +521,38 @@ function editQuestion(item,offCanvasId){
     .catch((error) => {
         console.error('Error with edit request:', error);
     });
+}
+
+function eventDetails(data){
+    console.log (data);
+    const section = document.getElementById('event-information');
+    // section.querySelector('#eventDescription').textContent=data.description;
+    const timestampStart = data.date_heure_debut;
+    const timestampEnd = data.date_heure_fin;
+
+    const dateStart = new Date(timestampStart);
+    const dateEnd = new Date(timestampEnd);
+    const options = {
+        year: 'numeric',    // Full numeric year
+        month: 'long',      // Full month name (e.g., "novembre")
+        day: 'numeric',     // Day of the month
+        hour: '2-digit',    // Two-digit hour
+        minute: '2-digit',  // Two-digit minute
+    };
+
+    const formattedStart = new Intl.DateTimeFormat('fr-CA', options).format(dateStart);
+    const formattedEnd = new Intl.DateTimeFormat('fr-CA', options).format(dateEnd);
+    titlePage(data.nbrQuestions, data.listOfQuestions, data.id, formattedStart, formattedEnd);
+   
+    if(data.client){
+        const clientLogoURL = data.client.logo.url;
+        
+         // Set client logo
+         const clientLogoElement = section.querySelector('#eventImg');
+         if (clientLogoElement) {
+             clientLogoElement.src = clientLogoURL;
+         }
+    }
+
+    
 }

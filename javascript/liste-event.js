@@ -33,7 +33,7 @@ fetch(apiURLEvent)
         eventCardClone.querySelector('#eventDescription').textContent = event.card_description; //DESCRIPTION DE L'ÉVÉNEMENT DANS LE BLOC DE GAUCHE 
         eventCardClone.querySelector('#event-id').textContent = event.id; // ID DE L'ÉVÉNEMENT 
         eventCardClone.querySelector('#event-status').textContent = event.statut; //STATUT DE L'ÉVÉNEMENT 
-
+        
         // SI UN CLIENT EST ASSOCIÉ À L'ÉVÉNEMENT (it should always be true but yea)
         if(event.client){
             const clientName = event.client.nom_compagnie;

@@ -10,60 +10,78 @@
 
         <!-- CSS -->
         <link rel="stylesheet" href="/style/questions.css">
+        <link rel="stylesheet" href="/style/all.css">
     </head>
     
     <body">
       <!-- BAR DE NAVIGATION -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">
-                <img src="/assets/1601092.png" alt="Bootstrap" width="50rem">
-             </a>
-             
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
+       <!-- NAVIGATION BAR -->
+       <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img class='navImg' src="/assets/dark-green small.png" alt="Bootstrap" width="50rem">
+          </a>
+         
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-        </nav>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Calendrier des événements</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Statistiques</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Ressources</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
 
         <!-- BOUTON POUR RETOUR VERS LA LISTE DES EVENEMENTS. FLECHES VERS LA GAUCHE : < -->
         <a href="liste-event.html" class="previous round">&#8249;</a>
         
 
       <!-- CONTENU DE LA PAGE -->
-        <div>
-          <h2 id="event-titre">  </h2> 
+        <div id="event-titre">
           <button id="createQuestions"style="display:none;"> Voulez-vous rajoutez des questions? </button>
-             
         </div>
         
         
         <section>
         <!-- LES INFORMATIONS SUR L'ÉVÉNEMENT (LOGO DU CLIENT || GRANDE DESCRIPTION - MAX CARACTÈRES 1000 DANS XANO || DATE DE DÉBUT ET FIN). BOÎTE CÔTÉ GAUCHE -->
-            <div id="event-information">
+            <!-- <div id="event-information">
                 <div><img class="card-img-top" id="eventImg" src="..."></div>
                 <div>
                   <p  id="eventDescription">...</p>
                   <p id="eventDate">...</p>
                 </div>
-            </div>
+            </div> -->
+            <div id="event-information">
+              <div style="display: flex;">
+                <img class="card-img-top" id="eventImg" src="...">
+                <h1 style="width: 100%;">Voici les résultats de votes</h1>
+                <br><br><br>
+              </div>
+              <table id="tableResults"></table>
+              <table>
+                <tr style="display: none;" id="table-row-template">
+                  <td class="question-valeur"></td>
+                  <td class="nombre-voteurs"></td>
+                  <td class="reponseMaj"></td>
+                  <td class="allVotes"></td>
+                </tr>
+              </table>
+              
+              
+          </div>
             
             <section style="width:100vw; margin-right:10px;">
           <!-- LISTE DES QUESTIONS -->
@@ -96,7 +114,11 @@
                     <button  style="display: inline-block; float: right; margin:0 0 0 10px;"   id="toggleButton"><i class="bi bi-pencil-fill"></i></button>
                   </div>
                 </div>
-                
+                 <!-- SECTION QUI COLLAPSE -->
+                 <div class="collapse" id="collapseExample">
+                  <!-- DIV DES REPONSES POSSIBLES : VALEURS UPDATÉ À L'AIDE DU JS -->
+                    <div class="card card-body" id="reponsesPossibles"></div>
+                </div>
                 <!-- MODAL DELETE -->
                 <div class="modal fade deleteMod " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
                   <div class="modal-dialog">
@@ -121,11 +143,7 @@
                   A simple success alert—check it out!
                 </div>
                 
-                <!-- SECTION QUI COLLAPSE -->
-                <div class="collapse" id="collapseExample">
-                    <!-- DIV DES REPONSES POSSIBLES : VALEURS UPDATÉ À L'AIDE DU JS -->
-                    <div class="card card-body" id="reponsesPossibles"></div>
-                </div>
+               
                 <div id="offcanvasEdit" class="offcanvasEdit">
                   <button class="btnInvisible"  id="closeButton">× Close</button>
                   <h2>Modifier la question</h2>
@@ -137,17 +155,9 @@
                   <button class="btnInvisible" type="submit" id="submitBtn">Send</button>
                 </div>
               </div>
-
-              
             </div>
-
-
           </section>
-          
-
-        </section>
-        <h1 id="h">Temporary Value</h1>
-        
+        </section>        
         
       <!-- JAVASCRIPT -->
         <!-- BOOTSTRAP -->

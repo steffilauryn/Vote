@@ -21,7 +21,23 @@ function verifyCode() {
         }
         else if((data.statut== 'Supprimé') ||(data.statut== 'Archivé')){
             const alertDiv = document.getElementById('alertePasLive');
-            alertDiv.innerText = `L'événement ${data.titre} n'est plus disponible. Veuillez reessayer sous peu`;
+            
+            const timestampStart = data.date_heure_debut;
+            const timestampEnd = data.date_heure_fin;
+            const dateStart = new Date(timestampStart);
+            const dateEnd = new Date(timestampEnd);
+            const options = {
+                day: 'numeric',     // Day of the month
+                month: 'long',      // Full month name (e.g., "novembre")
+                year: 'numeric',    // Full numeric year
+                hour: '2-digit',    // Two-digit hour
+                minute: '2-digit'  // Two-digit minute
+            };
+
+            const formattedStart = new Intl.DateTimeFormat('fr-CA', options).format(dateStart);
+            const formattedEnd = new Intl.DateTimeFormat('fr-CA', options).format(dateEnd);
+
+            alertDiv.innerText = `L'événement ${data.titre} commencera le ${formattedStart} et terminera le ${formattedEnd}`;
             alertDiv.style.display = 'grid'; 
             // After 10 seconds, hide the div
              setTimeout(() => 
