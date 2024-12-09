@@ -26,7 +26,8 @@ const params = new URLSearchParams(window.location.search);
 // CONSTANTES FROM URL
 const eventId = params.get('event_id'); //eventId from url
 const eventName = params.get('event_titre'); //event title from url
-
+console.log ("eventId = ", eventId);
+console.log ("eventName = ", eventName);
 // this is the div holding the title and the start live and end live buttons
 const eventInfoElement = document.getElementById('event-titre');
 
@@ -35,21 +36,7 @@ const questionsDiv = document.getElementById('questions');
 const tableQA = document.getElementById('tableResults');
 refreshQuestions();
 
-// GET EVENT DETAILS. LEFT SIDEBAR . 
-fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-      }
-      return response.json();
-})
-.then (data=>{
-    console.log(data);
-    eventDetails(data);
-})
-.catch(error=>{
-    console.error('Error fetching questions: ', error);
-});
+
 
 // FONCTIONS 
 // 1. launchQuestion(qid) : Appelé quand le bouton launch de la question est appuyé.  
@@ -349,6 +336,22 @@ function refreshQuestions() {
             console.error('Error fetching questions: ', error);
         });
 }
+
+// GET EVENT DETAILS. LEFT SIDEBAR . 
+fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+})
+.then (data=>{
+    console.log(data);
+    eventDetails(data);
+})
+.catch(error=>{
+    console.error('Error fetching event details in apiURLGetEventDetails: ', error);
+});
 
 function showAlert() {
     var alertBox = document.getElementById("customAlert");
