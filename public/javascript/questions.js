@@ -12,9 +12,7 @@ const API_ENDPOINTS = {
 
     apiURLPatchStatus : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editStatus`,
 
-    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`,
-    
-    apiURLAddQuestion : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question`
+    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
@@ -164,14 +162,12 @@ function renderQuestions(data)
             launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
             //editQuestionStatus(questionId,'Live');
             editStatus(null, questionId, null, 'Live', questionValeurDiv);
-            //TestDrive(questionValeurDiv);
         });
 
         btnEndLaunchQuestion.addEventListener('click', () => {
             endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
             //editQuestionStatus(questionId,'Launched');
             editStatus(null, questionId, null, 'Launched', questionValeurDiv);
-            //TestDrive(questionValeurDiv);
         });
 
         itemClone.style.display = 'block';
@@ -179,10 +175,7 @@ function renderQuestions(data)
     });
 
 }
-function TestDrive(a){
-    console.log(a);
-    console.log(a.innerHTML);
-}
+
 
 function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD4){
     fetch(API_ENDPOINTS.apiURLGetQuestionVoters(questionId))
@@ -270,7 +263,6 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
             }
 
             questionTD4.innerHTML = txt;
-            refreshQuestions();
         })
         .catch(error => {
             console.error('Error fetching questions: ', error);
@@ -451,14 +443,12 @@ function titlePage(nbrQuestions, list,eid,formattedStart,formattedEnd){
     start.addEventListener('click', () => {
         stop.classList.remove('disabled');
         start.classList.add('disabled');
-       // editEventStatus(eid, 'En direct');
         editStatus(eid, null, 'En direct',null);
     });
 
     stop.addEventListener('click', () => {
         stop.classList.add('disabled');
         start.classList.remove('disabled');
-       // editEventStatus(eid, 'Archivé');
         editStatus(eid, null, 'Archivé',null);
     });
 
@@ -567,38 +557,38 @@ document.getElementById('addQuestion').addEventListener('click', () => {
    addQuestions();
 });
 
-function addQuestions(){
+// function addQuestions(){
 
-    const question = document.getElementById('one');
-    const reponse = document.getElementById('two');
+//     const question = document.getElementById('one');
+//     const reponse = document.getElementById('two');
 
-    const postData = {
-        question_valeur: question,
-        event_id : eventId,
-        Reponses : reponse,
-        launch_status : 'Idle'
-    };
+//     const postData = {
+//         question_valeur: question,
+//         event_id : eventId,
+//         Reponses : reponse,
+//         launch_status : 'Idle'
+//     };
 
-    fetch(API_ENDPOINTS.apiURLAddQuestion(),{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-    })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Questions being refreshed");
-            console.log("Fetched data: ", data); 
-            renderQuestions(data);
-            console.log("Questions successfully refreshed");
-        })
-        .catch(error => {
-            console.error('Error fetching questions: ', error);
-        });
-}
+//     fetch(API_ENDPOINTS.apiURLAddQuestion(),{
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(postData),
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//             throw new Error('Network response was not ok ' + response.statusText);
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             console.log("Questions being refreshed");
+//             console.log("Fetched data: ", data); 
+//             renderQuestions(data);
+//             console.log("Questions successfully refreshed");
+//         })
+//         .catch(error => {
+//             console.error('Error fetching questions: ', error);
+//         });
+// }
