@@ -79,9 +79,9 @@ app.get('/:page', (req, res) => {
 // });
 
 // Redirect root URL to /user
-app.get('/', (req, res) => {
-    res.redirect('/vote-code.html');
-});
+app.get('/user', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/vote-code.html'));
+ });
 
 // Start the server
 app.listen(port, () => {
