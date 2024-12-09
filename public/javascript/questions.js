@@ -136,11 +136,9 @@ function renderQuestions(data)
     //Table Rows
         const questionTD1 = itemTableClone.querySelector('.question-valeur');
         questionTD1.innerText = item.question_valeur;
-        
         const questionTD2 = itemTableClone.querySelector('.nombre-voteurs');
         const questionTD3 = itemTableClone.querySelector('.reponseMaj');
         const questionTD4 = itemTableClone.querySelector('.allVotes');
-        // questionTD4.innerText = "A / B / C";
         tableResults(item.id, answerListItems,questionTD2, questionTD3,questionTD4);
         itemTableClone.style.display = 'table-row';
         tableQA.appendChild(itemTableClone);
@@ -270,6 +268,7 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
             }
 
             questionTD4.innerHTML = txt;
+            refreshQuestions();
         })
         .catch(error => {
             console.error('Error fetching questions: ', error);
