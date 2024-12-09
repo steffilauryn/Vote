@@ -50,10 +50,20 @@
         
 
       <!-- CONTENU DE LA PAGE -->
-        <div id="event-titre">
-          <button id="createQuestions"style="display:none;"> Voulez-vous rajoutez des questions? </button>
+        <div class="container my-5">
+          <div class="bg-dark position-relative p-5 text-center text-muted border border-dashed rounded-5">
+            <h1 style="color:whitesmoke">Voulez-vous rajouter une nouvelle question</h1>
+            <button class="btn btn-primary px-5" type="button" id="triggerAdd"> Créer une nouvelle question</button>
+          </div>
         </div>
-        
+
+        <form class='bg-dark' id='target' style="border:2px solid black; padding : 30px 0; width : 50vw;">
+          <label style="color:whitesmoke" for='one'>Question</label>
+          <input style='width:80%' id='one'>
+          <label style="color:whitesmoke" for='two'>Answer</label>
+          <input style='width:80%' id='two'>
+          <button id="addQuestion">Send</button>
+        </form>
         
         <section>
         <!-- LES INFORMATIONS SUR L'ÉVÉNEMENT (LOGO DU CLIENT || GRANDE DESCRIPTION - MAX CARACTÈRES 1000 DANS XANO || DATE DE DÉBUT ET FIN). BOÎTE CÔTÉ GAUCHE -->
@@ -75,8 +85,10 @@
               
               
           </div>
-            
+          
             <section style="width:100vw; margin-right:10px;">
+              
+
           <!-- LISTE DES QUESTIONS -->
               <!-- DIV QUI SERA UTILISÉ POUR AFFICHER LES QUESTIONS EN FORMAT DE BOUTON COLLAPSIBLE -->
               <div id="questions"></div>
@@ -101,9 +113,7 @@
                     <button style="display: inline-block; float: right; margin:0 0 0 10px;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="questionActionBtns btnEditDelete btnDelete">
                       <i class="bi bi-trash3-fill"></i>
                     </button><!--Delete button-->
-                    <!-- <button style="display: inline-block; float: right; margin:0 0 0 10px;"  class="questionActionBtns btnEditDelete btnEdit" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                      <i class="bi bi-pencil-fill"></i>
-                    </button>      -->
+               
                     <button  style="display: inline-block; float: right; margin:0 0 0 10px;"   id="toggleButton"><i class="bi bi-pencil-fill"></i></button>
                   </div>
                 </div>
@@ -147,9 +157,12 @@
                   <input id="newAnswer">
                   <button class="btnInvisible" type="submit" id="submitBtn">Send</button>
                 </div>
+
+                
               </div>
             </div>
           </section>
+
         </section>        
         
       <!-- JAVASCRIPT -->

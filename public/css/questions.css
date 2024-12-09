@@ -218,7 +218,25 @@ section {
         background-color: #dddddd;
       }
 
-
+.btn-primary{
+    background-color:var(--buttonGreen);
+    border-color: var(--buttonGreen);
+}
+.btn-primary:hover{
+    background-color: var(--logoGreen); /* Darker shade for hover effect */
+    border-color: var(--logoGreen);
+}
+#target{  
+    display:flex;
+    position:absolute;
+      top:-100px;
+      transition : top 0.5s ease;
+}
+    
+#target.active{
+     top: 50%;
+}
+    
 /* MOBILE */
 
 @media only screen and (max-width: 426px) {

@@ -12,7 +12,9 @@ const API_ENDPOINTS = {
 
     apiURLPatchStatus : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editStatus`,
 
-    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`
+    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`,
+    
+    apiURLAddQuestion : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
@@ -554,4 +556,49 @@ function eventDetails(data){
     }
 
     
+}
+
+document.getElementById('triggerAdd').addEventListener('click', () => {
+    const target = document.getElementById('target');
+    target.classList.toggle('active'); // Add or remove the class
+});
+
+document.getElementById('addQuestion').addEventListener('click', () => {
+   addQuestions();
+});
+
+function addQuestions(){
+
+    const question = document.getElementById('one');
+    const reponse = document.getElementById('two');
+
+    const postData = {
+        question_valeur: question,
+        event_id : eventId,
+        Reponses : reponse,
+        launch_status : 'Idle'
+    };
+
+    fetch(API_ENDPOINTS.apiURLAddQuestion(),{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+    })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Questions being refreshed");
+            console.log("Fetched data: ", data); 
+            renderQuestions(data);
+            console.log("Questions successfully refreshed");
+        })
+        .catch(error => {
+            console.error('Error fetching questions: ', error);
+        });
 }
