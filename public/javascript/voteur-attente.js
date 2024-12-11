@@ -1,11 +1,11 @@
 const API_ENDPOINTS = {
-    urlGetQuestionsPerEvent: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
-    urlGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`,
-    urlDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,
-    urlPatchQuestion: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${questionId}`,
-    urlGetQuestionStatus: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`,
-    urlPatchQuestionStatus : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editQuestionStatus/${questionId}`,
-    urlGetClientDetails : (clientId) => `https://x8ki-letl-twmt.n7.xano.io/api:nBe9gsiM/client/${clientId}`
+    urlGetQuestionsPerEvent: (eventId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
+    urlGetEventDetails: (eventId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/event/${eventId}`,
+    urlDeleteQuestion: (questionId) =>  `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,
+    urlPatchQuestion: (questionId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/editquestion/${questionId}`,
+    urlGetQuestionStatus: (questionId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/getStatus/${questionId}`,
+    urlPatchQuestionStatus : (questionId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/editQuestionStatus/${questionId}`,
+    urlGetClientDetails : (clientId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:nBe9gsiM/client/${clientId}`
 };
 
 function getQueryParam (name){

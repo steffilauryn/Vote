@@ -1,6 +1,6 @@
 const API_ENDPOINTS ={
-    apiURLVerifyCode : (code) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getEventCode?userCode=${code}`,
-    apiURLNewUser : ()=>`https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteurs`
+    apiURLVerifyCode : (code) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/getEventCode?userCode=${code}`,
+    apiURLNewUser : ()=>`https://xxbp-6khy-eo0w.n2.xano.io/api:x_2QV0_G/voteurs`
 };
 
 function verifyCode() {

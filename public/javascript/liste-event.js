@@ -1,7 +1,7 @@
 // ********** À FAIRE : FAIRE EN SORTE QUE L'INFORMATION SORTIE DANS LA CONSOLE EST PRIVÉ. AUTHORIZATION. 
 
 // LIEN POUR API QUI "GET" LA LISTE DE TOUS LES ÉVÉNEMENTS
-const apiURLEvent ='https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/allEvents';
+const apiURLEvent ='https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/allEvents';
 
 // FETCH QUI COMMENCE LA REQUÊTE
 fetch(apiURLEvent)

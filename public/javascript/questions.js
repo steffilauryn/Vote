@@ -1,20 +1,20 @@
 const API_ENDPOINTS = {
-    apiURLGetQuestionsPerEvent: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
+    apiURLGetQuestionsPerEvent: (eventId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/question?event_id=${eventId}`,
 
-    apiURLGetEventDetails: (eventId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`, //USED FOR TITLE AND EVENT DETAILS BOX BELOW
+    apiURLGetEventDetails: (eventId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/event/${eventId}`, //USED FOR TITLE AND EVENT DETAILS BOX BELOW
 
-    apiURLDeleteQuestion: (questionId) =>  `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,  //USED 
+    apiURLDeleteQuestion: (questionId) =>  `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/deleteQuestion/${questionId}`,  //USED 
 
-    apiURLPatchQuestion: (question_id) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editquestion/${question_id}`,//USED
+    apiURLPatchQuestion: (question_id) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/editquestion/${question_id}`,//USED
 
     
-    apiURLGetQuestionStatus: (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/getStatus/${questionId}`,
+    apiURLGetQuestionStatus: (questionId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/getStatus/${questionId}`,
 
-    apiURLPatchStatus : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editStatus`,
+    apiURLPatchStatus : () => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/editStatus`,
 
-    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`,
+    apiURLGetQuestionVoters : (questionId) => `https://xxbp-6khy-eo0w.n2.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`,
 
-    apiURLAddQuestion : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question`
+    apiURLAddQuestion : () => `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/question`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];

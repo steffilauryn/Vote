@@ -6,7 +6,7 @@ function getQueryParam (name){
 const clientId = getQueryParam ('client_id');
 const eventId = getQueryParam ('event_id');
 const voterId = getQueryParam ('vid');
-const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/event/${eventId}`;
+const apiUrl = `https://xxbp-6khy-eo0w.n2.xano.io/api:25UbIoB1/event/${eventId}`;
 
 console.log(apiUrl);
 fetch(apiUrl)

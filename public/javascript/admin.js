@@ -1,5 +1,5 @@
 const API_ENDPOINTS = {
-	apiAuthLogin : (email, password) => `https://x8ki-letl-twmt.n7.xano.io/api:i8EA4ZYM/auth/login`
+	apiAuthLogin : (email, password) => `https://xxbp-6khy-eo0w.n2.xano.io/api:i8EA4ZYM/auth/login`
 };
 
 console.clear();

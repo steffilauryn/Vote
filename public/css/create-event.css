@@ -28,6 +28,7 @@ h1{
     box-shadow: 0 2px 16px rgba(0,0,0,0.1);
     border-radius: 20px;
     padding: 20px;
+    margin-bottom: 2rem;
 }
 
 .tab_div{
@@ -45,6 +46,16 @@ h1{
     width: 100%;
     padding-top: 1rem;
     border-radius: 0;
+}
+.bottomBtn{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+    font-weight: 600;
+    width: 10%;
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 2px solid var(--bs-success-border-subtle) ;
+    margin-top: 1rem;
 }
 .tab_btn:hover{
     background-color: rgba(219, 219, 219, 0);
@@ -66,6 +77,34 @@ h1{
     border-radius: 0 0 10px 10px;
     width: 100%;
 }
+.content.active >h2{
+    text-align: center;
+}
+
+.detailsBloc{
+    display: none;
+}
+
+.selectDropdownMenu{
+    width: 80%;
+    border: none;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    padding-left: 1rem;
+}
+
+.inputRessource{
+    border: none;
+    width: 50%;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: rgba(245, 245, 245, 0.75);
+    padding-left: 1rem;
+    margin: 0.5rem;
+}
+
+
 /* text Color : var(--bs-success-text-emphasis) 
 background color : var(--bs-success-bg-subtle)
 border color : var(--bs-success-border-subtle)*/
