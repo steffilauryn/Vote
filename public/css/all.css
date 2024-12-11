@@ -10,6 +10,7 @@
     --stopRed : red;
     --stopLightRed : rgb(255, 119, 119);
     --lightGrey :#c4c4c4;
+    
 }
 
 body, nav{
@@ -28,4 +29,8 @@ nav{
 .navImg {
     border-radius:50%;
     
+}
+
+.bi{
+    width: 1rem;
 }

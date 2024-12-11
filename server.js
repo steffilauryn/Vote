@@ -79,7 +79,7 @@ app.get('/:page', (req, res) => {
 // });
 
 // Redirect root URL to /user
-app.get('/user', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views/vote-code.html'));
  });
 

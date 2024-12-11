@@ -12,7 +12,9 @@ const API_ENDPOINTS = {
 
     apiURLPatchStatus : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/editStatus`,
 
-    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`
+    apiURLGetQuestionVoters : (questionId) => `https://x8ki-letl-twmt.n7.xano.io/api:x_2QV0_G/voteur_question?question_id=${questionId}`,
+
+    apiURLAddQuestion : () => `https://x8ki-letl-twmt.n7.xano.io/api:25UbIoB1/question`
 };
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
@@ -133,6 +135,7 @@ function renderQuestions(data)
 
     const editBtn = itemClone.querySelector('#toggleButton');
     itemClone.querySelector('.offcanvasEdit').setAttribute('id',`offcanvasEdit${uniqueId}`);
+    itemClone.querySelector('.offcanvasEdit').setAttribute('id',`offcanvasEdit${uniqueId}`);
     //ONCLICK
         // DELETE QUESTION
         btnConfirmDelete.setAttribute(
@@ -144,7 +147,13 @@ function renderQuestions(data)
             'onclick',
             `openOffCanvas("${questionValeur.innerHTML}", "offcanvasEdit${uniqueId}", this.closest('#question-button-template'))`
         );
-        
+
+        btnLaunchQuestion.addEventListener('click', () => {
+            launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
+            //editQuestionStatus(questionId,'Live');
+            editStatus(null, questionId, null, 'Live', questionValeurDiv);
+        });
+
         btnLaunchQuestion.addEventListener('click', () => {
             launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
             //editQuestionStatus(questionId,'Live');
@@ -223,10 +232,10 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
                 
             }
             if(nbrDeVoteurs===0){
-                majKey='n/a';
+                majKey='-';
                 tiesTemp=[];
             }
-            console.log ('is it equal to n/a' ,majKey);
+            console.log ('is it equal to -' ,majKey);
             console.log('tiesTemp after: ',tiesTemp);
             
             if (tiesTemp.length > 0){
@@ -235,20 +244,30 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
             }
             else{
                 console.log('majKey when tiesTemp is empty: ',majKey);
-                questionTD3.innerText=majKey;
-                console.log(questionTD3.innerText);
-                console.log(questionTD3.innerHTML);
+                
+                if (isNaN(majKey)){
+                    questionTD3.innerText='-';
+                }else(questionTD3.innerText=majKey);
             }
 
             delete obj['nombre_de_voteurs'];
             let sortedObject = Object.fromEntries(
                 Object.entries(obj).sort(([, a], [, b]) => a - b)
             );
+            console.log('sortedObject: ',sortedObject);
             let txt = "";
             for (let x in sortedObject) {
-                txt += x + ':' + sortedObject[x] + `<br>`;
+                let value = sortedObject[x];
+                if(isNaN(value)){
+                    txt += x + ' : ---' + `<br>`;
+                }
+                else{
+                    txt += x + ' : ' + value + `<br>`;
+                }
+                
             }
 
+            
             questionTD4.innerHTML = txt;
         })
         .catch(error => {
@@ -469,10 +488,17 @@ function openOffCanvas(questionOG, offCanvasId, item) {
     offCanvas.querySelector('#oldquestion').innerText = questionOG;
 
     const submit = item.querySelector(`#${offCanvasId} #submitBtn`);
+    const close = item.querySelector(`#${offCanvasId} #offCanvasClose`);
     submit.setAttribute(
         'onclick',
         `editQuestion(this.closest('#question-button-template'),${offCanvasId})`
     );
+
+    close.addEventListener('click', () => {
+        offCanvas.classList.remove('open');
+        console.log(offCanvas.classList);
+    });
+    
     console.log(item.innerHTML);
 }
 
@@ -553,45 +579,47 @@ function eventDetails(data){
 
 document.getElementById('triggerAdd').addEventListener('click', () => {
     const target = document.getElementById('target');
-    target.classList.toggle('active'); // Add or remove the class
+    target.classList.add('active'); // Add or remove the class
 });
 
 document.getElementById('addQuestion').addEventListener('click', () => {
    addQuestions();
 });
 
-// function addQuestions(){
+document.getElementById('annulerAjout').addEventListener('click',()=>{
+    target.classList.remove('active');
+});
 
-//     const question = document.getElementById('one');
-//     const reponse = document.getElementById('two');
+function addQuestions(){
 
-//     const postData = {
-//         question_valeur: question,
-//         event_id : eventId,
-//         Reponses : reponse,
-//         launch_status : 'Idle'
-//     };
+    const question = document.getElementById('one').value;
+    const reponse = document.getElementById('two').value;
 
-//     fetch(API_ENDPOINTS.apiURLAddQuestion(),{
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(postData),
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//             throw new Error('Network response was not ok ' + response.statusText);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             console.log("Questions being refreshed");
-//             console.log("Fetched data: ", data); 
-//             renderQuestions(data);
-//             console.log("Questions successfully refreshed");
-//         })
-//         .catch(error => {
-//             console.error('Error fetching questions: ', error);
-//         });
-// }
+    const postData = {
+        question_valeur: question,
+        event_id : eventId,
+        Reponses : reponse,
+        launch_status : 'Idle'
+    };
+    console.log ('postData being sent : ', postData);
+    fetch(API_ENDPOINTS.apiURLAddQuestion(),{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+    })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Question was added");
+            refreshQuestions();
+        })
+        .catch(error => {
+            console.error('Error fetching questions: ', error);
+        });
+}

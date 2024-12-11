@@ -226,16 +226,30 @@ section {
     background-color: var(--logoGreen); /* Darker shade for hover effect */
     border-color: var(--logoGreen);
 }
+
+
+
 #target{  
-    display:flex;
-    position:absolute;
-    top:-100px;
+    position: absolute;
+    top:-500px;
+    left:-200px;
     transition : all 0.5s ease;
+    padding: 1rem;
+    border:2px solid black; 
+    height: fit-content;
+    width: 75%;
+    border-radius: 1rem;
 }
-    
+
+#target > h2{
+    color:white;
+}
+
 #target.active{
-     top: 50%;
+    top: 25%;
+    left: 10%;
 }
+
     
 /* MOBILE */
 
@@ -272,4 +286,5 @@ section {
         background-color: #f9f9f9; /* Optional: Background color */
         margin : 2rem;
     }
+    
 }
