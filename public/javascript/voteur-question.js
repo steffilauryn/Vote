@@ -20,6 +20,7 @@ function getQueryParam (name){
 // CONSTANTES FROM URL
 const questionId = getQueryParam('question_id'); //eventId from url
 const voterId = getQueryParam ('vid');
+const eventId = getQueryParam ('eid');
 
 async function getClientId(eid) {
     try {
@@ -56,7 +57,7 @@ fetch(API_ENDPOINTS.apiURLGetQuestionDetails(questionId))
     answerListItems.forEach((item, index) => {
         const newDiv = document.createElement('div'); // Create a new <div> element
         newDiv.id = index+1;
-        newDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.527)';
+        // newDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.527)';
         newDiv.style.display='flex'
         newDiv.style.flex = '1';
         newDiv.style.justifyContent = 'center';
@@ -147,12 +148,12 @@ function goBackToWaitingPage(obj){
         postVoteurEvent(arr);
         setTimeout(function() {
             window.location.href = `voteur-attente.html?event_id=${arr[3]}&client_id=${arr[4]}&vid=${arr[2]}`;
-        }, 3000);   
+        }, 500);   
     }
     else{
         setTimeout(function() {
             refreshStatus(arr[0],arr[1],arr[2],arr[3]);
-    }, 20000);  
+    }, 500);  
         
     }
     //refreshStatus (questionId, answer, voterId,event_id)
@@ -196,4 +197,17 @@ function postVoteurEvent(arr){
     });
 }
 
+// fetch(API_ENDPOINTS.apiURLGetEventDetails(eventId))
+//         .then(response => {
+//             if (!response.ok) {
+//             throw new Error('Network response was not ok ' + response.statusText);
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             console.log(data);
+//         })
+//         .catch(error => {
+//             console.error('Error fetching questions: ', error);
+//         });
 

@@ -19,11 +19,7 @@ const API_ENDPOINTS = {
 
 const STATUT_EVENT = ['Planifié','En direct', 'Archivé', 'Supprimé'];
 
-// FONCTION QUI VA CHERCHER L'INFORMATION MIS EN PARAMÈTRES À PARTIR DE L'URL
-// function getQueryParam (name){
-//     const urlParams = new URLSearchParams(window.location.search);
-//     return urlParams.get(name);
-// }
+
 const params = new URLSearchParams(window.location.search);
 // CONSTANTES FROM URL
 const eventId = params.get('event_id'); //eventId from url
@@ -41,7 +37,7 @@ refreshQuestions();
 
 
 // FONCTIONS 
-// 1. launchQuestion(qid) : Appelé quand le bouton launch de la question est appuyé.  
+// 1. launch(qid) : Appelé quand le bouton launch de la question est appuyé.  
 //      
 
 function renderQuestions(data)
@@ -148,22 +144,17 @@ function renderQuestions(data)
             `openOffCanvas("${questionValeur.innerHTML}", "offcanvasEdit${uniqueId}", this.closest('#question-button-template'))`
         );
 
-        btnLaunchQuestion.addEventListener('click', () => {
-            launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
-            //editQuestionStatus(questionId,'Live');
-            editStatus(null, questionId, null, 'Live', questionValeurDiv);
-        });
+        console.log(btnLaunchQuestion);
+        console.log(btnEndLaunchQuestion);
 
         btnLaunchQuestion.addEventListener('click', () => {
-            launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
-            //editQuestionStatus(questionId,'Live');
-            editStatus(null, questionId, null, 'Live', questionValeurDiv);
+            launch(btnLaunchQuestion, btnEndLaunchQuestion);
+            editStatus(null, questionId, null, 'Live', questionValeurDiv,'','');
         });
 
         btnEndLaunchQuestion.addEventListener('click', () => {
-            endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion);
-            //editQuestionStatus(questionId,'Launched');
-            editStatus(null, questionId, null, 'Launched', questionValeurDiv);
+            endlaunch(btnLaunchQuestion, btnEndLaunchQuestion);
+            editStatus(null, questionId, null, 'Launched', questionValeurDiv,'','');
         });
 
         itemClone.style.display = 'block';
@@ -266,8 +257,6 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
                 }
                 
             }
-
-            
             questionTD4.innerHTML = txt;
         })
         .catch(error => {
@@ -275,20 +264,23 @@ function tableResults(questionId, answerList,questionTD2,questionTD3, questionTD
         });
 }
 
-function launchQuestion(btnLaunchQuestion, btnEndLaunchQuestion){
-    if (btnLaunchQuestion && btnEndLaunchQuestion) {
-        btnLaunchQuestion.disabled = true;
-        btnEndLaunchQuestion.disabled = false;
-
+function launch(startBtn, stopBtn){
+    if (startBtn && stopBtn) {
+        // startBtn.disabled = true;
+        // stopBtn.disabled = false;
+        startBtn.classList.add('disabled');
+        stopBtn.classList.remove('disabled');
     } else {
         console.error("One or both buttons are not valid elements.");
     }
 }
 
-function endLaunchQuestion(btnLaunchQuestion, btnEndLaunchQuestion){
-    if (btnLaunchQuestion && btnEndLaunchQuestion) {
-        btnLaunchQuestion.disabled = true;
-        btnEndLaunchQuestion.disabled = true;
+function endlaunch(startBtn, stopBtn){
+    if (startBtn && stopBtn) {
+        // startBtn.disabled = true;
+        // stopBtn.disabled = true;
+        startBtn.classList.remove('disabled');
+        stopBtn.classList.remove('disabled');
     } else {
         console.error("One or both buttons are not valid elements.");
     }
@@ -382,7 +374,7 @@ function showAlert() {
     }, 3000);
 }
 
-function editStatus(eid, qid, eventStatus,questionStatus){
+function editStatus(eid, qid, eventStatus,questionStatus,startBtn,stopBtn){
     const patchData = {
         statusEvent: eventStatus,
         event_id: eid,
@@ -421,25 +413,41 @@ function editStatus(eid, qid, eventStatus,questionStatus){
         }
         else if(qid===null && questionStatus===null){
             console.log(`Change event ${eid} status with ${eventStatus}`);
+
             if(eventStatus==='En direct'){
                 setTimeout(function(){
                     alert(`L'evenement est en direct`);
                 },1000);
-            }
-            if(eventStatus==='Archivé'){
+            }else if (eventStatus==='Archivé'){
                 setTimeout(function(){
                     alert(`L'evenement n'est plus en direct`);
                 },1000);
             }
+            if(eventStatus==='Planifié'){
+                //start enabled and stop disabled
+                startBtn.classList.remove('disabled');
+                stopBtn.classList.add('disabled');
+            } else if(eventStatus==='En direct'){
+                //start disabled and stop enabled
+                startBtn.classList.add('disabled');
+                stopBtn.classList.remove('disabled');
+            }else if (eventStatus==='Archivé'){
+                //start disabled and stop disabled
+                startBtn.classList.add('disabled');
+                stopBtn.classList.add('disabled');
+            }else{
+                startBtn.style.display='none';
+                stopBtn.style.display='none';
+            }
         }
-        
+        refreshQuestions();
     })
     .catch((error) => {
         console.error('Error with edit request:', error);
     });
 }
 
-function titlePage(nbrQuestions, list,eid,formattedStart,formattedEnd){
+function titlePage(nbrQuestions, list,eid,formattedStart,formattedEnd, statut){
     if (nbrQuestions > 0 && list[0] !== "") {
         eventInfoElement.style = `text-align:center;`;
         eventInfoElement.innerHTML = `
@@ -450,30 +458,30 @@ function titlePage(nbrQuestions, list,eid,formattedStart,formattedEnd){
                                                 <button style="border:none; background-color:rgba(0, 0, 0, 0)"id="startBtn" class="btnPlayStop ">
                                                     <i class ="bi bi-play-fill playEvent">START LIVE</i>
                                                 </button>
-                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)" id="stopBtn" class="btnPlayStop disabled">
+                                                <button style="border:none; background-color:rgba(0, 0, 0, 0)" id="stopBtn" class="btnPlayStop">
                                                     <i class="bi bi-stop-fill stopEvent" id="stopEvent">STOP LIVE</i>
                                                 </button>
                                             </div>
                                         </div>`;
+                                        const start = document.getElementById('startBtn');
+    const stop = document.getElementById('stopBtn');
+
+    start.addEventListener('click', () => {
+        // stop.classList.remove('disabled');
+        // start.classList.add('disabled');
+        editStatus(eid, null, 'En direct',null, start, stop);
+    });
+
+    stop.addEventListener('click', () => {
+        // stop.classList.add('disabled');
+        // start.classList.remove('disabled');
+        editStatus(eid, null, 'Archivé',null, stop);
+    });
     } else { 
         eventInfoElement.style = `text-align:center; font-size:5rem`;
         eventInfoElement.innerText= `Aucune question assigné.`;
     }
-    const start = document.getElementById('startBtn');
-    const stop = document.getElementById('stopBtn');
     
-    start.addEventListener('click', () => {
-        stop.classList.remove('disabled');
-        start.classList.add('disabled');
-        editStatus(eid, null, 'En direct',null);
-    });
-
-    stop.addEventListener('click', () => {
-        stop.classList.add('disabled');
-        start.classList.remove('disabled');
-        editStatus(eid, null, 'Archivé',null);
-    });
-
     console.log(eventInfoElement.innerHTML);
 }
 
@@ -546,6 +554,8 @@ function editQuestion(item,offCanvasId){
 function eventDetails(data){
     console.log (data);
     const section = document.getElementById('event-information');
+    const start = document.getElementById('startBtn');
+    const stop = document.getElementById('stopBtn');
     // section.querySelector('#eventDescription').textContent=data.description;
     const timestampStart = data.date_heure_debut;
     const timestampEnd = data.date_heure_fin;
@@ -562,7 +572,7 @@ function eventDetails(data){
 
     const formattedStart = new Intl.DateTimeFormat('fr-CA', options).format(dateStart);
     const formattedEnd = new Intl.DateTimeFormat('fr-CA', options).format(dateEnd);
-    titlePage(data.nbrQuestions, data.listOfQuestions, data.id, formattedStart, formattedEnd);
+    titlePage(data.nbrQuestions, data.listOfQuestions, data.id, formattedStart, formattedEnd, data.statut);
    
     if(data.client){
         const clientLogoURL = data.client.logo.url;
@@ -574,7 +584,7 @@ function eventDetails(data){
          }
     }
 
-    
+    console.log('DATA.STATUT = ', data.statut);
 }
 
 document.getElementById('triggerAdd').addEventListener('click', () => {

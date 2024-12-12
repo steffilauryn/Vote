@@ -3,7 +3,8 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "react-color": "^2.19.3"
   },
   "name": "vote",
   "version": "1.0.0",
