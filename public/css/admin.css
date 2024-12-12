@@ -31,7 +31,6 @@ html,body {
 		z-index: 5;
 		-webkit-transition: all .3s ease;
 		
-		
 		&.slide-up {
 			top: 5%;
 			-webkit-transform: translate(-50%, 0%);

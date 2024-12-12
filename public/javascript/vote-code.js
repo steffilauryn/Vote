@@ -8,7 +8,8 @@ function verifyCode() {
     fetch(API_ENDPOINTS.apiURLVerifyCode(codeEnteredByUser))
     .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
+          throw new Error('Network response was not ok ' + response.statusText+" code entered by user is : "+codeEnteredByUser + " given response is : " + response);
+          
         }
         return response.json();
       })
