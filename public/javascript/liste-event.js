@@ -56,11 +56,6 @@ fetch(apiURLEvent)
 
         // UPDATE ONCLICK 
         eventCardClone.setAttribute('onclick', `window.location.href = 'questions.html?event_id=${event.id}&event_titre=${event.titre}'`);
-        const createEvent = document.getElementById('createEventBtn');
-        createEvent.addEventListener('click', () => {
-          window.location.href = 'create-event.html';
-        });
-      
 
         // CLONE BLOC
         eventCardClone.style.display = 'block';

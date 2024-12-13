@@ -42,8 +42,7 @@
               </div>
             </div>
         </nav>
-        <!-- <div id="overlay" onclick="turnOffOverlay()"></div> -->
-        <div id="overlay"></div>
+
         <h1> Création d'un nouvel événement </h1>
         <div class="alert alert-success" role="alert">
             <svg class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
@@ -66,99 +65,71 @@
                 <button class="btn btn-light tab_btn"> Personalisation de l'événement </button>
                 <button class="btn btn-light tab_btn"> Questions et Réponses </button>
             </div>
-            <!-- INFORMATION DU CLIENT -->
             <div class="content active">
                 <h2>Information du client</h2>
                 <div class="company-select">
                     <h4>Nom de la compagnie</h4>
-                    <select class="selectDropdownMenu" id="selectDropdownMenu" onchange="checkValue()">
+                    <p>Vous ne trouvez pas la compagnie que vous cherchez? Veuillez en créer un nouveau en cliquant sur le bouton suivant : <i class="bi bi-pencil-square"></i></p>
+                    <select class="selectDropdownMenu">
                         <option value="0">Choisissez votre compagnie:</option>
+                        <option value="1">Audi</option>
                     </select>
-
-                    <div class="input-container companyNameInputDiv">
-                        <label for="newCompany">Nom de la compagnie : </label>
-                        <input class="input" id="newCompany">
-                    </div>
                     
                     <div class="detailsBloc">
-                        <div class="input-container">
+                        <div>
                             <label for="personneRessource">Nom de la personne ressource</label>
-                            <input class="input" id="personneRessource">
+                            <input class="inputRessource" id="personneRessource">
                         </div>
-                        <div class="input-container">
+                        <div>
                             <label for="courrielPersonneRessource">Courriel de la personne ressource</label>
-                            <input class="input" id="courrielPersonneRessource">
+                            <input class="inputRessource" id="courrielPersonneRessource">
                         </div>
-                        <div class="input-container">
+                        <div>
                             <label for="telPersonneRessource">Numéro de téléphone de la personne ressource</label>
-                            <input class="input" id="telPersonneRessource">
+                            <input class="inputRessource" id="telPersonneRessource">
                         </div>
                     </div>
                 </div>
                 <div class="insert-logo">
                     <h4>Logo de la compagnie</h4>
                     <i class="bi bi-image"></i>
-                    <img id="logoImg" src="">
                 </div>
             </div>
-
-            <!-- INFORMATION DE L'ÉVÉNEMENT -->
             <div class="content">
                 <h2>Information de l'événement</h2>
-                <div>
-                    <label for="eventName">Nom de l'événement : </label>
-                    <input class="input" id="eventName">
-                </div>
-                <div>
-                    <label for="eventCategory">Catégorie de l'événement : </label>
-                    <select id="eventCategory" class="selectDropdownMenu" onchange="addNewValue()">
-                        <option value="0">Choisissez la catégorie</option>
-                        <option value="Assemblée Générale">Assemblée Générale</option>
-                        <option value="Formation">Formation</option>
-                        <option value="Congrès">Congrès</option>
-                        <option value="+ Add New">+ Add New</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="eventType">Type d'événement : </label>
-                    <select id="eventType" class="selectDropdownMenu">
-                        <option value="0">Choisissez le type</option>
-                        <option value="Assemblée Générale">Virtuel</option>
-                        <option value="Formation">Hybride</option>
-                        <option value="Congrès">Présentiel</option>
-                    </select>
-                </div>
-                
-                
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, error dolorum molestiae accusantium molestias voluptatum? Doloribus, iste, labore numquam beatae iusto deleniti reprehenderit corrupti voluptatum magni, perspiciatis architecto vel dolorem!</p>
             </div>
-
-            <!-- PERSONALISATION DE L'ÉVÉNEMENT -->
             <div class="content">
                 <h2>Personalisation de l'événement</h2>
                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, error dolorum molestiae accusantium molestias voluptatum? Doloribus, iste, labore numquam beatae iusto deleniti reprehenderit corrupti voluptatum magni, perspiciatis architecto vel dolorem!</p>
             </div>
-
-            <!-- QUESTIONS ET RÉPONSES -->
             <div class="content">
                 <h2>Questions et Réponses</h2>
-                <div class="dynamicDiv"></div>
-                
-                <button class="btn btn-light addQuestionBtn"> + Ajouter une nouvelle question </button>
-                <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, error dolorum molestiae accusantium molestias voluptatum? Doloribus, iste, labore numquam beatae iusto deleniti reprehenderit corrupti voluptatum magni, perspiciatis architecto vel dolorem!</p>
             </div>
-            <button class="btn btn-light bottomBtn"> Sauvegarder</button>
-        </div>
-        
-        <div class="dialog-box" id="box" >
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-            <div id="cat">
-                <label for="icategory">Quelle est la nouvelle catégorie? </label>
-                <input id="icategory" class="input">
-            </div>
-            <div class="saveBtn">
-                <button class="btn btn-light"  onclick="turnOffOverlay()">Sauvegarder</button>
-            </div>
-            
+            <button class="btn btn-light bottomBtn"> Sauvegarder </button>
+            <!-- MODAL TO ADD A NEW ELEMENT -->
+            <!-- <div class="modal-dialog modal-dialog-centered">
+                <div>
+                    <div>
+                        <label for="personneRessource">Nom de la compagnie</label>
+                        <input class="inputRessource" id="personneRessource">
+                    </div>
+                    <div>
+                        <label for="personneRessource">Nom de la personne ressource</label>
+                        <input class="inputRessource" id="personneRessource">
+                    </div>
+                    <div>
+                        <label for="courrielPersonneRessource">Courriel de la personne ressource</label>
+                        <input class="inputRessource" id="courrielPersonneRessource">
+                    </div>
+                    <div>
+                        <label for="telPersonneRessource">Numéro de téléphone de la personne ressource</label>
+                        <input class="inputRessource" id="telPersonneRessource">
+                    </div>
+                </div>
+            </div> -->
+
         </div>
 
         <div class="content-disclaimer"></div>

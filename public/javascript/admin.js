@@ -1,6 +1,5 @@
-require('dotenv').config();
 const API_ENDPOINTS = {
-	apiAuthLogin : (email, password) => `${process.env.apiAuthLogin}`
+	apiAuthLogin : (email, password) => `https://xxbp-6khy-eo0w.n2.xano.io/api:i8EA4ZYM/auth/login`
 };
 
 console.clear();

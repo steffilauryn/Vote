@@ -73,7 +73,7 @@ function renderData(data){
 
 function newPage(questionIndex) {
     setTimeout(function() {
-        window.location.href = `voteur-question.html?question_id=${questionIndex}&vid=${voterId}&eid=${eventId}`;
+        window.location.href = `voteur-question.html?question_id=${questionIndex}&vid=${voterId}`;
     }, 500);    
 }
 
@@ -90,5 +90,5 @@ function checkQuestionLive(statusArray, data){
                 refreshData();
             }
         // },600000)
-    },500)
+    },5000)
 }
