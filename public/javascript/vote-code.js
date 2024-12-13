@@ -100,7 +100,7 @@ function newVoter(voterIPadr,inputCourriel,eventId, clientId){
         document.querySelector('.spinner').classList.remove('disappear');
         setTimeout(function() {  
             window.location.href = `voteur-event.html?client_id=${clientId}&event_id=${eventId}&vid=${data.id}`;
-        },3000);
+        },500);
     })
     .catch((error) => {
         console.error('Error with edit request:', error);

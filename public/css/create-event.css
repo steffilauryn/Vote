@@ -3,7 +3,9 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
+
 nav{
     width: 100%;
 }
@@ -24,7 +26,6 @@ h1{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    /* background-color: bisque; */
     box-shadow: 0 2px 16px rgba(0,0,0,0.1);
     border-radius: 20px;
     padding: 20px;
@@ -51,7 +52,7 @@ h1{
     background-color: rgba(255, 0, 0, 0);
     border: none;
     font-weight: 600;
-    width: 10%;
+    width: max-content;
     padding: 0.5rem;
     border-radius: 10px;
     border: 2px solid var(--bs-success-border-subtle) ;
@@ -81,10 +82,17 @@ h1{
     text-align: center;
 }
 
-.detailsBloc{
+.content > div{
+    margin: 10px 0;
+}
+
+.companyNameInputDiv{
     display: none;
 }
 
+.companyNameInputDiv.active{
+    display: block;
+}
 .selectDropdownMenu{
     width: 80%;
     border: none;
@@ -94,7 +102,7 @@ h1{
     padding-left: 1rem;
 }
 
-.inputRessource{
+.input{
     border: none;
     width: 50%;
     height: 2.5rem;
@@ -104,6 +112,81 @@ h1{
     margin: 0.5rem;
 }
 
+.dialog-box{
+    background-color: bisque;
+    position: absolute;
+    border-radius: 10px;
+    width: 50%;
+    top: 50%;
+    padding: 1rem;
+    display: none;
+    z-index:3;
+}
+
+#cat{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+}
+
+#cat >label{
+    width: 25%;
+}
+#icategory{
+    width: 75%;
+}
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+  }
+
+  .saveBtn{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+#logoImg{
+    width: 3rem;
+}
+
+.form-check-input{
+    width: 2rem;
+    height: 2rem;
+    margin-left:1rem !important;
+    border-radius: 10px !important;
+    margin-top: 0 !important;
+}
+
+.questionAnswerContainer{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.boxQuestions {
+    flex: 9.5;
+}
+.inputDiv{
+    flex: 0.5;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-check-input {
+    width: 2rem;
+    height:2rem;
+}
 
 /* text Color : var(--bs-success-text-emphasis) 
 background color : var(--bs-success-bg-subtle)
