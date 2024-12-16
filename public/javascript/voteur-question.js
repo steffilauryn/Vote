@@ -62,7 +62,6 @@ fetch(API_ENDPOINTS.apiURLGetQuestionDetails(questionId))
         newDiv.style.flex = '1';
         newDiv.style.justifyContent = 'center';
         newDiv.style.alignItems = 'center';
-        newDiv.style.fontSize= '2rem';
         newDiv.textContent = item; 
         newDiv.classList.add('answerBtn');
         newDiv.setAttribute('type', 'button');
