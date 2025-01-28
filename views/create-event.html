@@ -76,30 +76,37 @@
                     </select>
 
                     <div class="input-container companyNameInputDiv">
-                        <label for="newCompany">Nom de la compagnie : </label>
+                        <label for="newCompany">Nom de la compagnie : <b style="color:red">*</b></label>
                         <input class="input" id="newCompany">
                     </div>
                     
                     <div class="detailsBloc">
                         <div class="input-container">
-                            <label for="personneRessource">Nom de la personne ressource</label>
+                            <label for="personneRessource">Nom de la personne ressource <b style="color:red">*</b></label>
                             <input class="input" id="personneRessource">
                         </div>
                         <div class="input-container">
-                            <label for="courrielPersonneRessource">Courriel de la personne ressource</label>
+                            <label for="courrielPersonneRessource">Courriel de la personne ressource <b style="color:red">*</b></label>
                             <input class="input" id="courrielPersonneRessource">
                         </div>
                         <div class="input-container">
-                            <label for="telPersonneRessource">Numéro de téléphone de la personne ressource</label>
+                            <label for="telPersonneRessource">Numéro de téléphone de la personne ressource <b style="color:red">*</b></label>
                             <input class="input" id="telPersonneRessource">
                         </div>
                     </div>
                 </div>
                 <div class="insert-logo">
-                    <h4>Logo de la compagnie</h4>
-                    <i class="bi bi-image"></i>
-                    <img id="logoImg" src="">
+                    <h4><i class="bi bi-image"></i> Logo de la compagnie <b style="color:red">*</b></h4>
+                    
+                    <form id="imageUploadForm">
+                        <input type="file" id="fileInput" />
+                    </form>
+                    
+                    <div id="preview" style="width: 50vw; height:50vh; background-color: rgba(255, 255, 255, 0.479); margin-top: 2rem; border-radius: 10px;"></div>
                 </div>
+                <p id="infoManquante1" style="display:none;color:red"></p>
+                <button class="btn btn-light bottomBtn" id="saveP1"> Sauvegarder et continuer</button>
+                
             </div>
 
             <!-- INFORMATION DE L'ÉVÉNEMENT -->
@@ -112,30 +119,60 @@
                 <div>
                     <label for="eventCategory">Catégorie de l'événement : </label>
                     <select id="eventCategory" class="selectDropdownMenu" onchange="addNewValue()">
-                        <option value="0">Choisissez la catégorie</option>
+                        <option value="">Choisissez la catégorie</option>
                         <option value="Assemblée Générale">Assemblée Générale</option>
                         <option value="Formation">Formation</option>
                         <option value="Congrès">Congrès</option>
-                        <option value="+ Add New">+ Add New</option>
+                        <option value="Autre catégorie">Autre catégorie</option>
                     </select>
                 </div>
                 <div>
                     <label for="eventType">Type d'événement : </label>
                     <select id="eventType" class="selectDropdownMenu">
-                        <option value="0">Choisissez le type</option>
-                        <option value="Assemblée Générale">Virtuel</option>
-                        <option value="Formation">Hybride</option>
-                        <option value="Congrès">Présentiel</option>
+                        <option value="">Choisissez le type</option>
+                        <option value="Virtuel">Virtuel</option>
+                        <option value="Hybride">Hybride</option>
+                        <option value="Présentiel">Présentiel</option>
                     </select>
                 </div>
-                
+                <p id="infoManquante2" style="display:none;color:red"></p>
+                <button class="btn btn-light bottomBtn" id="saveP2"> Sauvegarder et continuer</button>
                 
             </div>
 
             <!-- PERSONALISATION DE L'ÉVÉNEMENT -->
             <div class="content">
                 <h2>Personalisation de l'événement</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, error dolorum molestiae accusantium molestias voluptatum? Doloribus, iste, labore numquam beatae iusto deleniti reprehenderit corrupti voluptatum magni, perspiciatis architecto vel dolorem!</p>
+                <label for="selectDropdownMenuThemes">Thèmes</label>
+                <sub>Si vous préféré, vous pouviez choisir un de nos thèmes prédéfinis.</sub>
+                <select class="selectDropdownMenu" id="selectDropdownMenuThemes" onchange="checkValue()">
+                    <option value="0">-</option>
+                </select>
+                <label for="colorPickerBackground">Couleur de l'arriere-plan : </label>
+                <input type="color" id="colorPickerBackground" name="colorPicker" value="#dc9090">
+                <br>
+                <label for="colorPickerAnswersBox">Couleur des boutons : </label>
+                <input type="color" id="colorPickerAnswersBox" name="colorPicker" value="#ce5353">
+                <br>
+                <label for="colorPickerText">Couleur du texte : </label>
+                <input type="color" id="colorPickerText" name="colorPicker" value="#000000">
+                <br>
+                <br>
+                <h5><i>PREVIEW</i></h5>
+                <div style="background-color: white;padding: 0.75rem;">
+                    <div style="display: flex; flex-direction: column;background-color: #dc9090; text-align: center; height: max-content;" id="backgroundPreview">
+                        <div id="questionPreview" style="position:relative;margin: 1rem;"> QUESTION </div>
+                        <div style="display: grid;grid-template-columns: auto auto;margin:1rem;">
+                            <div class="answerPreview" style="background-color: #ce5353;margin:1rem;">Reponse 1</div>
+                            <div class="answerPreview" style="background-color: #ce5353;margin:1rem;">Reponse 2</div>
+                            <div class="answerPreview" style="background-color: #ce5353;margin:1rem;">Reponse 3</div>
+                            <div class="answerPreview" style="background-color: #ce5353;margin:1rem;">Reponse 4</div>
+                        </div>
+                    </div>
+                </div>
+               
+                <p id="infoManquante3" style="display:none;color:red"></p>
+                <button class="btn btn-light bottomBtn" id="saveP3"> Sauvegarder et continuer</button>
             </div>
 
             <!-- QUESTIONS ET RÉPONSES -->
@@ -145,10 +182,14 @@
                 
                 <button class="btn btn-light addQuestionBtn"> + Ajouter une nouvelle question </button>
                 <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                <p id="infoManquante3" style="display:none;color:red"></p>
+                <button class="btn btn-light bottomBtn" id="saveP4" style="margin-top: 3rem"> Sauvegarder</button>
             </div>
-            <button class="btn btn-light bottomBtn"> Sauvegarder</button>
+            <!-- <button class="btn btn-light bottomBtn"> Sauvegarder</button> -->
+
+            
         </div>
-        
+        <button class="btn btn-light bottomBtn" id="saveP3" style="display:none; margin-bottom: 2 rem;"> Soumettre</button>
         <div class="dialog-box" id="box" >
             <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
             <div id="cat">

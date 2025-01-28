@@ -1,12 +1,39 @@
 const API_ENDPOINTS = {
 	apiAllClients: () => `https://xxbp-6khy-eo0w.n2.xano.io/api:nBe9gsiM/client`,
     apiPostClient:() => ``
+    
 };
+
+//Variables
+const all_tabs = document.querySelectorAll('.tab_btn');
+const all_content = document.querySelectorAll('.content');
+const addQ = document.querySelector('.addQuestionBtn');
+const selectDropDownClients =  document.querySelector('.selectDropdownMenu');
+var cnid = document.querySelector('.companyNameInputDiv');
+var companyName = document.getElementById('newCompany');
+const inputValue2 = document.getElementById('personneRessource');
+const inputValue3 = document.getElementById('courrielPersonneRessource');
+const inputValue4 = document.getElementById('telPersonneRessource');
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+var selectedDropdown = document.querySelector('#eventCategory');
+var dialogBox = document.querySelector('.dialog-box');
+var overlay = document.getElementById("overlay");
+const icat = document.getElementById('icategory');
+const colorPickedBackground = document.getElementById("colorPickerBackground");
+const colorPickedAnswerBox = document.getElementById("colorPickerAnswersBox");
+const colorPickedText= document.getElementById("colorPickerText");
+const box = document.querySelector('.dynamicDiv');
+const eventNameInput = document.getElementById('eventName');
+const eventType = document.getElementById('eventType');
+const savePage1 = document.getElementById('saveP1');
+const savePage2 = document.getElementById('saveP2');
+const savePage3 = document.getElementById('saveP3');
+const savePage4 = document.getElementById('saveP4');
+
 
 //TABS
 document.addEventListener('DOMContentLoaded', () => {
-    const all_tabs = document.querySelectorAll('.tab_btn');
-    const all_content = document.querySelectorAll('.content');
     var count=0;
     all_tabs.forEach((tab,index)=>{
         tab.addEventListener('click',()=>{
@@ -17,16 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const addQ = document.querySelector('.addQuestionBtn');
     addQ.addEventListener('click',()=>{
         count++;
         addNewQuestion(count);
         console.log(count);
     });
-
 });
 
-//GET ALL QUESTIONS
+//Page 1
+//GET ALL clients
 fetch(API_ENDPOINTS.apiAllClients())
     .then(response => {
         if (!response.ok) {
@@ -36,7 +62,6 @@ fetch(API_ENDPOINTS.apiAllClients())
     })
     .then(data => {
         console.log(data);
-        const selectDropDownClients =  document.querySelector('.selectDropdownMenu');
         const optionLast = document.createElement('option');
         optionLast.value='+ Add New';
         optionLast.innerText='+ Add New';
@@ -53,14 +78,10 @@ fetch(API_ENDPOINTS.apiAllClients())
         console.error('Error fetching questions: ', error);
     });
 
-//ADD NEW CLIENT
-
-
 
 //CHECK + ADD NEW
 function checkValue(){
-    var selectedDropdownValue = document.querySelector('#selectDropdownMenu').value;
-    var cnid = document.querySelector('.companyNameInputDiv');
+    var selectedDropdownValue = selectDropDownClients.value;
     if((selectedDropdownValue === '+ Add New')){
         cnid.classList.add('active');
     }
@@ -79,61 +100,146 @@ function prefillValues(selectedDropdownValue){
         return response.json();
     })
     .then(data => {
-        console.log(data);
-        // const inputValue1 = document.getElementById('newCompany');
-        const inputValue2 = document.getElementById('personneRessource');
-        const inputValue3 = document.getElementById('courrielPersonneRessource');
-        const inputValue4 = document.getElementById('telPersonneRessource');
-        const inputValue5 = document.getElementById('logoImg');
-
+        console.log("apiAllClients : ", data);
 
         data.forEach((client) =>{
             if(client.nom_compagnie===selectedDropdownValue){
+                companyName = selectedDropdownValue;
                 inputValue2.value = client.personne_ressource;
                 inputValue3.value = client.courriel_personne_ressource;
                 inputValue4.value = client.numero_de_telephone;
-                inputValue5.src = client.logo.url;
+                preview.innerHTML = `<img src="${client.logo.url}" alt="Preview" class="logoImg" />`;
             }
         })
     })
     .catch(error => {
-        console.error('Error fetching questions: ', error);
+        console.error('Error fetching client information: ', error);
     });
 }
 
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="logoImg" />`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please upload a valid image.");
+    }
+});
+
+var tablePageOne = {companyName:"", nomPersonne:"",courriel:"",telephone:"", logoUrl:""};
+var infoManquante = document.getElementById("infoManquante1");
+
+savePage1.addEventListener("click", ()=>{
+    tablePageOne.companyName = companyName;
+    tablePageOne.nomPersonne = inputValue2.value;
+    tablePageOne.courriel = inputValue3.value;
+    tablePageOne.telephone = inputValue4.value;
+    tablePageOne.logoUrl = document.querySelector(".logoImg").src;
+    var pageComplete = Object.values(tablePageOne);
+    if(pageComplete.indexOf('')!=-1){
+        infoManquante.innerHTML=`Certaines informations sont manquantes. Veuillez revérifier vos réponses.`
+        infoManquante.style.display="block";
+    }
+    else{
+        infoManquante.style.display="none";
+        console.log(tablePageOne);
+    }
+})
+
+//Page 2
 //ADD NEW CATEGORY
 function addNewValue(){
-    var selectedDropdown = document.querySelector('#eventCategory');
-    var dialogBox = document.querySelector('.dialog-box');
-    if(selectedDropdown.value === '+ Add New'){
+    if(selectedDropdown.value === 'Autre catégorie'){
         turnOnOverlay();
     }
 }
 
 //TURN ON OVERLAY AND ACTIVATE DIALOG BOX TO ADD NEW CATEGORY
 function turnOnOverlay(){
-    document.querySelector('.dialog-box').style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+    dialogBox.style.display = "block";
+    overlay.style.display = "block";
 }
 
 //TURN OFF OVERLAY AND CLOSE DIALOG BOX TO ADD NEW CATEGORY. ADD NEW CATEGORY TO DROPDOWN LIST
 function turnOffOverlay(){
-    const newCat = document.getElementById('icategory').value;
-    const selectDropDown = document.getElementById('eventCategory');
+    const newCat = icat.value;
     const newOption = document.createElement('option');
-    var oldElem = selectDropDown[selectDropDown.length-1];
+    var oldElem = selectedDropdown[selectedDropdown.length-1];
     newOption.value=newCat;
     newOption.innerText=newCat;
-    selectDropDown.remove(selectDropDown.length-1);
-    selectDropDown.appendChild(newOption);
-    selectDropDown.appendChild(oldElem);
+    selectedDropdown.remove(selectedDropdown.length-1);
+    selectedDropdown.appendChild(newOption);
+    selectedDropdown.appendChild(oldElem);
     newOption.selected = true;
-    document.querySelector('.dialog-box').style.display = "none";
-    document.getElementById("overlay").style.display = "none";
+    dialogBox.style.display = "none";
+    overlay.style.display = "none";
 }
 
+var tablePageTwo = {eventName:"", eventCategory:"",eventType:""};
+var infoManquante2 = document.getElementById("infoManquante2");
+
+savePage2.addEventListener("click", ()=>{
+    tablePageTwo.eventName = eventNameInput.value;
+    tablePageTwo.eventCategory = selectedDropdown.value;
+    tablePageTwo.eventType = eventType.value;
+    var pageComplete = Object.values(tablePageTwo);
+    if(pageComplete.indexOf('')!=-1){
+        infoManquante2.innerHTML=`Certaines informations sont manquantes. Veuillez revérifier vos réponses.`
+        infoManquante2.style.display="block";
+    }
+    else{
+        infoManquante2.style.display="none";
+        console.log(tablePageTwo);
+    }
+})
+
+//Page 3
+colorPickedBackground.addEventListener("input",()=>{
+  document.getElementById("backgroundPreview").style.backgroundColor = colorPickedBackground.value;
+})
+
+colorPickedAnswerBox.addEventListener("input",()=>{
+    var allAnswerBoxes = document.querySelectorAll(".answerPreview");
+   allAnswerBoxes.forEach(box => {
+    box.style.backgroundColor=colorPickedAnswerBox.value;
+   })
+})
+
+colorPickedText.addEventListener("input",()=>{
+  document.getElementById("questionPreview").style.color = colorPickedText.value;
+
+  var allAnswerBoxes = document.querySelectorAll(".answerPreview");
+   allAnswerBoxes.forEach(box => {
+   box.style.color=colorPickedText.value;
+  })
+})
+
+var tablePageThree = {couleur_arriere_plan:"", couleur_bouton:"",couleur_texte:""};
+var infoManquante3 = document.getElementById("infoManquante3");
+
+savePage3.addEventListener("click", ()=>{
+    tablePageThree.couleur_arriere_plan = colorPickedBackground.value;
+    tablePageThree.couleur_bouton = colorPickedAnswerBox.value;
+    tablePageThree.couleur_texte = colorPickedText.value;
+    console.log(tablePageThree);
+    
+    var pageComplete = Object.values(tablePageThree);
+    if(pageComplete.indexOf('')!=-1){
+        infoManquante3.innerHTML=`Certaines informations sont manquantes. Veuillez revérifier vos réponses.`
+        infoManquante3.style.display="block";
+    }
+    else{
+        infoManquante3.style.display="none";
+        console.log(tablePageThree);
+    }
+})
+
+//Page 4
 function addNewQuestion(count){
-    const box = document.querySelector('.dynamicDiv');
     var newDiv = document.createElement('div');
     newDiv.classList.add('questionAnswerContainer');
     newDiv.innerHTML=`
@@ -160,3 +266,77 @@ function addNewQuestion(count){
     box.appendChild(newDiv);
 
 }
+
+var tablePageFour = {};
+
+savePage4.addEventListener("click", ()=>{
+    const allqr = document.querySelectorAll('.form-control');
+    const onlyQ = [];
+    const onlyR = [];
+    for(var i = 0; i<allqr.length; i++)
+    {
+        if (i%2===0){
+            onlyQ.push(allqr[i].value);
+        }
+        else{
+            onlyR.push(allqr[i].value);
+        }
+    }
+
+    for(var i = 0; i<onlyQ.length;i++){
+        tablePageFour[onlyQ[i]]=onlyR[i];
+    }
+    console.log(onlyQ);
+    console.log(onlyR);
+    console.log(tablePageFour);
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//to add a new event to the table i need the following information
+//titre de l'evenement 
+//description
+//card_description
+//statut
+//date_heure_debut
+//date_heure_fin
+//nbr_inscrits
+//nbr_voteurs
+//nbr_questions
+//slug
+//theme_id
+//client_id
+//type
+//entry_code
+//category
